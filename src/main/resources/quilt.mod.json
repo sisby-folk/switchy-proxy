@@ -1,0 +1,47 @@
+{
+	"schema_version": 1,
+	"quilt_loader": {
+		"group": "folk.sisby",
+		"id": "switchy-proxy",
+		"version": "${version}",
+		"metadata": {
+			"name": "Switchy Proxy",
+			"description": "Per-message nickname swapping using Switchy",
+			"contributors": {
+				"Sisby Folk": "Owner"
+			},
+			"contact": {
+				"homepage": "https://modrinth.com/mod/switchy-proxy",
+				"issues": "https://github.com/sisby-folk/switchy-proxy/issues",
+				"sources": "https://github.com/sisby-folk/switchy-proxy"
+			},
+			"icon": "assets/switchy_proxy/icon.png"
+		},
+		"intermediate_mappings": "net.fabricmc:intermediary",
+		"entrypoints": {
+			"events": [
+				"folk.sisby.switchy_proxy.SwitchyProxy",
+				"folk.sisby.switchy_proxy.SwitchyProxyCommands",
+				"folk.sisby.switchy_proxy.modules.ProxyModule"
+			]
+		},
+		"depends": [
+			{
+				"id": "minecraft",
+				"versions": "${mc}"
+			},
+			{
+				"id": "quilt_loader",
+				"versions": ">=${ql}"
+			},
+			{
+				"id": "quilt_base",
+				"versions": "${qsl}"
+			},
+			{
+				"id": "switchy-core",
+				"versions": "${switchy}"
+			}
+		]
+	}
+}

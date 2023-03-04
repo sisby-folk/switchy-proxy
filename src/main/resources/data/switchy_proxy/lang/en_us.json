@@ -1,0 +1,23 @@
+{
+  "lib39:enable_enhanced_lang": true,
+  "commands": {
+    "switchy_proxy": {
+      "add": {
+        "command": "/switchy proxy add {} {}",
+        "help": "adds a proxy pattern",
+        "placeholder": {
+          "preset": "[name]",
+          "proxy": "[pattern]"
+        }
+      },
+      "remove": {
+        "command": "/switchy proxy remove {} {}",
+        "help": "removes a proxy",
+        "placeholder": {
+          "preset": "[name]",
+          "proxy": "[pattern]"
+        }
+      }
+    }
+  }
+}
