@@ -38,6 +38,12 @@ repositories {
 		}
 	}
 	maven {
+		url = "https://api.modrinth.com/maven"
+		content {
+			includeGroup "maven.modrinth"
+		}
+	}
+	maven {
 		name = "TerraformersMC"
 		url = "https://maven.terraformersmc.com/"
 	}
@@ -49,6 +55,46 @@ repositories {
 		name = "NucleoidMC"
 		url = uri("https://maven.nucleoid.xyz/")
 	}
+	// Fabric Tailor
+	maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+
+	// Origins
+	maven {
+		url = 'https://ladysnake.jfrog.io/artifactory/mods'
+	}
+	maven {
+		url = 'https://maven.cafeteria.dev'
+		content {
+			includeGroup 'net.adriantodt.fabricmc'
+		}
+	}
+	maven {
+		url "https://maven.jamieswhiteshirt.com/libs-release"
+		content {
+			includeGroup "com.jamieswhiteshirt"
+		}
+	}
+
+	maven { // Cloth Config
+		url "https://maven.shedaniel.me/"
+	}
+	maven { // ModMenu
+		url "https://maven.terraformersmc.com/"
+	}
+
+	maven { // owo-lib
+		url 'https://maven.wispforest.io'
+	}
+
+	// Jitpack
+	maven {
+		url 'https://jitpack.io'
+		content {
+			// Avoids sending everything through JitPack, which can be slow.
+			// Add any further using `includeGroup 'com.example'`
+			includeGroupByRegex 'com\\.github\\..*'
+		}
+	}
 }
 
 dependencies {
@@ -59,6 +105,9 @@ dependencies {
 	modImplementation libs.qsl
 
 	modImplementation libs.switchyCore
+	modImplementation libs.switchyCompat
+	modImplementation libs.styledChat
+	modImplementation libs.placeholder
 }
 
 processResources {
@@ -67,7 +116,8 @@ processResources {
 			"mc"  : libs.versions.mc.get(),
 			"ql"  : libs.versions.ql.get(),
 			"qsl"  : libs.versions.qsl.get(),
-			"switchy": libs.versions.switchy.get()
+			"switchy": libs.versions.switchy.get(),
+			"styledChat": libs.versions.styledChat.get()
 	]
 
 	inputs.properties(map)

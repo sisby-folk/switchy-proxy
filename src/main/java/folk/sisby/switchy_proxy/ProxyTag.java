@@ -32,6 +32,10 @@ public record ProxyTag(String prefix, String suffix) {
 		return tester.startsWith(prefix) && tester.endsWith(suffix);
 	}
 
+	public String strip(String tester) {
+		return tester.substring(prefix.length(), tester.length()-suffix.length());
+	}
+
 	@Override
 	public String toString() {
 		return prefix + PLACEHOLDER + suffix;

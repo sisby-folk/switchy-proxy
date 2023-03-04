@@ -41,7 +41,12 @@
 			{
 				"id": "switchy-core",
 				"versions": "${switchy}"
+			},
+			{
+				"id": "styledchat",
+				"versions": "${styledChat}"
 			}
 		]
-	}
+	},
+	"mixin": "switchy-proxy.mixins.json"
 }

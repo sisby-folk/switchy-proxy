@@ -36,6 +36,15 @@ dependencyResolutionManagement {
 			library('qm', 'org.quiltmc', 'quilt-mappings').versionRef('qm')
 			library('qsl', 'org.quiltmc', 'qsl').versionRef('qsl')
 			library('switchyCore', 'folk.sisby', 'switchy-core').versionRef('switchy')
+			library('switchyCompat', 'folk.sisby', 'switchy-compat').versionRef('switchy')
+
+			// Functionality
+
+			version('styledChat', '2.0.2+1.19.2')
+			version('placeholder', '2.0.0-pre.1+1.19.2')
+
+			library('styledChat', 'maven.modrinth', 'styled-chat').versionRef('styledChat')
+			library('placeholder', 'eu.pb4', 'placeholder-api').versionRef('placeholder')
 		}
 	}
 }
