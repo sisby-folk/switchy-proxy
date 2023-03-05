@@ -12,17 +12,14 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-@Mixin(value = PlayerEntity.class, priority = 999)
+@Mixin(value = PlayerEntity.class, priority = 1001)
 public class PlayerEntityMixin implements SwitchyProxyPlayer {
 	private String switchy_proxy$matchedPreset;
 
 	@ModifyArg(method = "getDisplayName", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/Team;decorateName(Lnet/minecraft/scoreboard/AbstractTeam;Lnet/minecraft/text/Text;)Lnet/minecraft/text/MutableText;"))
 	private Text switchyProxy$replaceName(Text text) {
-		if (switchy_proxy$getMatchedPreset() != null && (Object) this instanceof SwitchyPlayer sp) {
-			// Clear immediately
-			String matchedPreset = switchy_proxy$getMatchedPreset();
-			switchy_proxy$setMatchedPreset(null);
-
+		String matchedPreset = switchy_proxy$getMatchedPreset();
+		if (matchedPreset != null && (Object) this instanceof SwitchyPlayer sp) {
 			SwitchyPresets presets = sp.switchy$getPresets();
 			try {
 				SwitchyPreset preset = presets.getPreset(matchedPreset);
