@@ -62,7 +62,7 @@ public class SwitchyProxyCommands implements SwitchyEvents.CommandInit {
 			try {
 				ProxyModule module = preset.getModule(ProxyModule.ID, ProxyModule.class);
 				try {
-					module.addTag(pattern, ProxyTag.parse(pattern));
+					module.addTag(ProxyTag.parse(pattern));
 					tellSuccess(player, "commands.switchy_proxy.add.success", literal(pattern), literal(name));
 				} catch (IllegalArgumentException ignored) {
 					tellInvalid(player, "commands.switchy_proxy.add.fail.invalid", literal("text"));

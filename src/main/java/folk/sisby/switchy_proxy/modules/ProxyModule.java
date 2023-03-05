@@ -26,8 +26,8 @@ public class ProxyModule implements SwitchyModule, SwitchyEvents.Init {
 
 	private final Map<String, ProxyTag> tags = new HashMap<>();
 
-	public void addTag(String pattern, ProxyTag tag) {
-		tags.put(pattern, tag);
+	public void addTag(ProxyTag tag) {
+		tags.put(tag.toString(), tag);
 	}
 
 	public void removeTag(String pattern) throws IllegalArgumentException {
