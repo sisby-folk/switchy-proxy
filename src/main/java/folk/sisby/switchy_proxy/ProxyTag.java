@@ -11,6 +11,7 @@ public record ProxyTag(String prefix, String suffix) {
 		if (!pattern.contains(PLACEHOLDER)) throw new IllegalArgumentException("Pattern is missing placeholder.");
 		String pre = pattern.substring(0, pattern.indexOf(PLACEHOLDER));
 		String suf = pattern.substring(pattern.indexOf(PLACEHOLDER) + PLACEHOLDER.length());
+		if (pre.contains(PLACEHOLDER) || suf.contains(PLACEHOLDER)) throw new IllegalArgumentException("Too many placeholders!");
 		if (pre.isEmpty() && suf.isEmpty()) throw new IllegalArgumentException("Suffix and Prefix can't be both empty");
 		return new ProxyTag(pre, suf);
 	}
