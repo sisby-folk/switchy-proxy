@@ -8,7 +8,8 @@
         "success": "Successfully added {} proxy to {}",
         "fail": {
           "preset": "That preset doesn't exist! Try {}",
-          "invalid": "Invalid tag format. Should include {}"
+          "module": "The proxies module is disabled! Try {}",
+          "invalid": "Invalid proxy format. Should include {}"
         },
         "placeholder": {
           "preset": "[name]",
@@ -21,6 +22,7 @@
         "success": "Successfully removed {} proxy from {}",
         "fail": {
           "preset": "That preset doesn't exist! Try {}",
+          "module": "The proxies module is disabled! Try {}",
           "pattern": "That proxy doesn't exist!"
         },
         "placeholder": {
