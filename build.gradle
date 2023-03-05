@@ -165,7 +165,7 @@ if (System.getenv("MODRINTH_TOKEN")) {
 		detectLoaders = false
 		dependencies {
 			required.project "switchy"
-			optional.project "trinkets"
+			required.project "styled-chat"
 		}
 		changelog = "Changelog: https://github.com/sisby-folk/switchy-proxy/releases/tag/v" + origVersion
 		syncBodyFrom = rootProject.file("README.md").text

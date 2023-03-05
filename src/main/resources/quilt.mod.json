@@ -28,7 +28,7 @@
 		"depends": [
 			{
 				"id": "minecraft",
-				"versions": "${mc}"
+				"versions": ">=${mc}"
 			},
 			{
 				"id": "quilt_loader",
@@ -36,15 +36,15 @@
 			},
 			{
 				"id": "quilt_base",
-				"versions": "${qsl}"
+				"versions": ">=${qsl}"
 			},
 			{
 				"id": "switchy-core",
-				"versions": "${switchy}"
+				"versions": ">=${switchy}"
 			},
 			{
 				"id": "styledchat",
-				"versions": "${styledChat}"
+				"versions": ">=${styledChat}"
 			}
 		]
 	},
