@@ -1,10 +1,11 @@
 package folk.sisby.switchy_proxy.mixin;
 
-import eu.pb4.placeholders.api.TextParserUtils;
 import folk.sisby.switchy.api.SwitchyPlayer;
 import folk.sisby.switchy.api.presets.SwitchyPreset;
 import folk.sisby.switchy.api.presets.SwitchyPresets;
+import folk.sisby.switchy.modules.DrogtorCompat;
 import folk.sisby.switchy.modules.StyledNicknamesCompat;
+import folk.sisby.switchy_proxy.SwitchyProxy;
 import folk.sisby.switchy_proxy.SwitchyProxyPlayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
@@ -23,13 +24,23 @@ public class PlayerEntityMixin implements SwitchyProxyPlayer {
 			SwitchyPresets presets = sp.switchy$getPresets();
 			try {
 				SwitchyPreset preset = presets.getPreset(matchedPreset);
-				try {
-					String nickname = preset.getModule(StyledNicknamesCompat.ID, StyledNicknamesCompat.class).styled_nickname;
-					if (nickname != null) {
-						return TextParserUtils.formatText(nickname);
+				if (SwitchyProxy.StyledCompat) {
+					try {
+						Text nickname = preset.getModule(StyledNicknamesCompat.ID, StyledNicknamesCompat.class).getText();
+						if (nickname != null) {
+							return nickname;
+						}
+					} catch (IllegalArgumentException ignored) {
 					}
-				} catch (IllegalArgumentException ignored) {
-
+				}
+				if (SwitchyProxy.DrogtorCompat) {
+					try {
+						Text nickname = preset.getModule(DrogtorCompat.ID, DrogtorCompat.class).getText();
+						if (nickname != null) {
+							return nickname;
+						}
+					} catch (IllegalArgumentException ignored) {
+					}
 				}
 			} catch (IllegalArgumentException ignored) {
 

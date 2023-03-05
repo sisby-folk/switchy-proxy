@@ -30,7 +30,8 @@ public class ProxyModule implements SwitchyModule, SwitchyEvents.Init {
 		tags.put(pattern, tag);
 	}
 
-	public void removeTag(String pattern) {
+	public void removeTag(String pattern) throws IllegalArgumentException {
+		if (!tags.containsKey(pattern)) throw new IllegalArgumentException("The specified pattern does not exist");
 		tags.remove(pattern);
 	}
 

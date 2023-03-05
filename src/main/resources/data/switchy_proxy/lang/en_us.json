@@ -5,6 +5,11 @@
       "add": {
         "command": "/switchy proxy add {} {}",
         "help": "adds a proxy pattern",
+        "success": "Successfully added {} proxy to {}",
+        "fail": {
+          "preset": "That preset doesn't exist! Try {}",
+          "invalid": "Invalid tag format. Should include {}"
+        },
         "placeholder": {
           "preset": "[name]",
           "proxy": "[pattern]"
@@ -13,6 +18,11 @@
       "remove": {
         "command": "/switchy proxy remove {} {}",
         "help": "removes a proxy",
+        "success": "Successfully removed {} proxy from {}",
+        "fail": {
+          "preset": "That preset doesn't exist! Try {}",
+          "pattern": "That proxy doesn't exist!"
+        },
         "placeholder": {
           "preset": "[name]",
           "proxy": "[pattern]"
