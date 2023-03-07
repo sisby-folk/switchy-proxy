@@ -7,7 +7,7 @@ public record ProxyTag(String prefix, String suffix) {
 	public static final String KEY_PREFIX = "prefix";
 	public static final String KEY_SUFFIX = "suffix";
 
-	public static ProxyTag parse(String pattern) throws IllegalStateException {
+	public static ProxyTag parse(String pattern) throws IllegalArgumentException {
 		if (!pattern.contains(PLACEHOLDER)) throw new IllegalArgumentException("Pattern is missing placeholder.");
 		String pre = pattern.substring(0, pattern.indexOf(PLACEHOLDER));
 		String suf = pattern.substring(pattern.indexOf(PLACEHOLDER) + PLACEHOLDER.length());

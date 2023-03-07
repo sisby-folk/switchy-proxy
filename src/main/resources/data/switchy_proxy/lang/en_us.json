@@ -10,10 +10,6 @@
           "preset": "That preset doesn't exist! Try {}",
           "module": "The proxies module is disabled! Try {}",
           "invalid": "Invalid proxy format. Should include {}"
-        },
-        "placeholder": {
-          "preset": "[name]",
-          "proxy": "[pattern]"
         }
       },
       "remove": {
@@ -24,11 +20,11 @@
           "preset": "That preset doesn't exist! Try {}",
           "module": "The proxies module is disabled! Try {}",
           "pattern": "That proxy doesn't exist!"
-        },
-        "placeholder": {
-          "preset": "[name]",
-          "proxy": "[pattern]"
         }
+      },
+      "placeholder": {
+        "preset": "[name]",
+        "proxy": "[pattern]"
       }
     }
   }
