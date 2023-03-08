@@ -27,5 +27,17 @@
         "proxy": "[pattern]"
       }
     }
+  },
+  "switchy": {
+    "switchy_proxy": {
+      "module": {
+        "proxies": {
+          "description": "A module that holds \"proxy tags\" that allow using other presets' nicknames for individual messages.",
+          "enabled": "You can use and add proxies with /switchy proxy.",
+          "disabled": "You cannot use or add proxies.",
+          "warning": "All proxy tags will be cleared!"
+        }
+      }
+    }
   }
 }

@@ -22,6 +22,10 @@ public class ProxyModule extends ProxyModuleData implements SwitchyModule, Switc
 
 	@Override
 	public void onInitialize() {
-		SwitchyModuleRegistry.registerModule(ID, ProxyModule::new, new SwitchyModuleInfo(true, SwitchyModuleEditable.ALWAYS_ALLOWED, Text.translatable("commands.switchy_proxy.module.proxy.description")));
+		SwitchyModuleRegistry.registerModule(ID, ProxyModule::new, new SwitchyModuleInfo(true, SwitchyModuleEditable.ALWAYS_ALLOWED, Text.translatable("switchy.switchy_proxy.module.proxies.description"))
+				.withDescriptionWhenEnabled(Text.translatable("switchy.switchy_proxy.module.proxies.enabled"))
+				.withDescriptionWhenDisabled(Text.translatable("switchy.switchy_proxy.module.proxies.disabled"))
+				.withDeletionWarning(Text.translatable("switchy.switchy_proxy.module.proxies.warning"))
+		);
 	}
 }
