@@ -7,7 +7,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 
-public class ProxyModule extends ProxyModuleData implements SwitchyModule, SwitchyModuleDisplayable, SwitchyEvents.Init {
+public class ProxyModule extends ProxyModuleData implements SwitchyModule, SwitchyModuleClientable, SwitchyEvents.Init {
 	public void updateFromPlayer(ServerPlayerEntity player, @Nullable String nextPreset) {
 	}
 
@@ -16,7 +16,7 @@ public class ProxyModule extends ProxyModuleData implements SwitchyModule, Switc
 	}
 
 	@Override
-	public NbtCompound toDisplayNbt() {
+	public NbtCompound toClientNbt() {
 		return toNbt();
 	}
 

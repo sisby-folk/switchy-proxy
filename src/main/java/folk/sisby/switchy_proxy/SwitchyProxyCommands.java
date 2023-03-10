@@ -7,11 +7,13 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import folk.sisby.switchy.api.SwitchyEvents;
+import folk.sisby.switchy.api.SwitchyFeedbackStatus;
 import folk.sisby.switchy.api.SwitchyPlayer;
 import folk.sisby.switchy.api.exception.ModuleNotFoundException;
 import folk.sisby.switchy.api.exception.PresetNotFoundException;
 import folk.sisby.switchy.api.presets.SwitchyPreset;
 import folk.sisby.switchy.api.presets.SwitchyPresets;
+import folk.sisby.switchy.util.Feedback;
 import folk.sisby.switchy.util.SwitchyCommand;
 import folk.sisby.switchy_proxy.modules.ProxyModule;
 import net.minecraft.command.CommandSource;
@@ -23,9 +25,11 @@ import net.minecraft.text.Text;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import static folk.sisby.switchy.util.Feedback.*;
+import static folk.sisby.switchy.util.Feedback.helpText;
+import static folk.sisby.switchy.util.Feedback.literal;
 import static folk.sisby.switchy.util.SwitchyCommand.execute;
 
 public class SwitchyProxyCommands implements SwitchyEvents.CommandInit {
@@ -42,41 +46,49 @@ public class SwitchyProxyCommands implements SwitchyEvents.CommandInit {
 		return builder.buildFuture();
 	}
 
-	public void addProxy(ServerPlayerEntity player, SwitchyPresets presets, String name, String pattern) {
+	public SwitchyFeedbackStatus addProxy(SwitchyPresets presets, Consumer<Text> feedback, String name, String pattern) {
 		try {
 			SwitchyPreset preset = presets.getPreset(name);
 			try {
 				ProxyModule module = preset.getModule(ProxyModule.ID, ProxyModule.class);
 				try {
 					module.addTag(ProxyTag.parse(pattern));
-					tellSuccess(player, "commands.switchy_proxy.add.success", literal(pattern), literal(name));
+					feedback.accept(Feedback.success("commands.switchy_proxy.add.success", literal(pattern), literal(name)));
+					return SwitchyFeedbackStatus.SUCCESS;
 				} catch (IllegalArgumentException ignoredParseFail) {
-					tellInvalid(player, "commands.switchy_proxy.add.fail.invalid", literal("text"));
+					feedback.accept(Feedback.invalid("commands.switchy_proxy.add.fail.invalid", literal("text")));
+					return SwitchyFeedbackStatus.INVALID;
 				}
 			} catch (ModuleNotFoundException ignored) {
-				tellInvalidTry(player, "commands.switchy_proxy.add.fail.module", "commands.switchy.module.enable.command", literal(ProxyModule.ID.toString()));
+				feedback.accept(Feedback.invalidTry("commands.switchy_proxy.add.fail.module", "commands.switchy.module.enable.command", literal(ProxyModule.ID.toString())));
+				return SwitchyFeedbackStatus.INVALID;
 			}
 		} catch (PresetNotFoundException ignored) {
-			tellInvalidTry(player, "commands.switchy_proxy.add.fail.preset", "commands.switchy.list.command");
+			feedback.accept(Feedback.invalidTry("commands.switchy_proxy.add.fail.preset", "commands.switchy.list.command"));
+			return SwitchyFeedbackStatus.INVALID;
 		}
 	}
 
-	public void removeProxy(ServerPlayerEntity player, SwitchyPresets presets, String name, String pattern) {
+	public SwitchyFeedbackStatus removeProxy(SwitchyPresets presets, Consumer<Text> feedback, String name, String pattern) {
 		try {
 			SwitchyPreset preset = presets.getPreset(name);
 			try {
 				ProxyModule module = preset.getModule(ProxyModule.ID, ProxyModule.class);
 				try {
 					module.removeTag(pattern);
-					tellSuccess(player, "commands.switchy_proxy.remove.success", literal(pattern), literal(name));
+					feedback.accept(Feedback.success("commands.switchy_proxy.remove.success", literal(pattern), literal(name)));
+					return SwitchyFeedbackStatus.SUCCESS;
 				} catch (IllegalArgumentException ignoredMissingTag) {
-					tellInvalid(player, "commands.switchy_proxy.remove.fail.pattern");
+					feedback.accept(Feedback.invalid("commands.switchy_proxy.remove.fail.pattern"));
+					return SwitchyFeedbackStatus.INVALID;
 				}
 			} catch (ModuleNotFoundException ignored) {
-				tellInvalidTry(player, "commands.switchy_proxy.remove.fail.module", "commands.switchy.module.enable.command", literal(ProxyModule.ID.toString()));
+				feedback.accept(Feedback.invalidTry("commands.switchy_proxy.remove.fail.module", "commands.switchy.module.enable.command", literal(ProxyModule.ID.toString())));
+				return SwitchyFeedbackStatus.INVALID;
 			}
 		} catch (PresetNotFoundException ignored) {
-			tellInvalidTry(player, "commands.switchy_proxy.remove.fail.preset", "commands.switchy.list.command");
+			feedback.accept(Feedback.invalidTry("commands.switchy_proxy.remove.fail.preset", "commands.switchy.list.command"));
+			return SwitchyFeedbackStatus.INVALID;
 		}
 	}
 
@@ -87,12 +99,12 @@ public class SwitchyProxyCommands implements SwitchyEvents.CommandInit {
 						.then(SwitchyCommand.presetArgument(true)
 								.then(CommandManager.literal("add")
 										.then(CommandManager.argument("pattern", StringArgumentType.greedyString())
-												.executes(c -> execute(c, (player, presets) -> addProxy(player, presets, c.getArgument("preset", String.class), c.getArgument("pattern", String.class)))))
+												.executes(c -> execute(c, (pl, pr, f) -> addProxy(pr, f, c.getArgument("preset", String.class), c.getArgument("pattern", String.class)))))
 								)
 								.then(CommandManager.literal("remove")
 										.then(CommandManager.argument("pattern", StringArgumentType.greedyString())
 												.suggests(SwitchyProxyCommands::suggestPatterns)
-												.executes(c -> execute(c, (player, presets) -> removeProxy(player, presets, c.getArgument("preset", String.class), c.getArgument("pattern", String.class)))))
+												.executes(c -> execute(c, (pl, pr, f) -> removeProxy(pr, f, c.getArgument("preset", String.class), c.getArgument("pattern", String.class)))))
 								)
 						)
 				);

@@ -105,6 +105,7 @@ dependencies {
 	modImplementation libs.qsl
 
 	modImplementation libs.switchyCore
+	modImplementation libs.switchyUI
 	modImplementation libs.switchyCompat
 	modImplementation libs.styledChat
 	modImplementation libs.placeholder

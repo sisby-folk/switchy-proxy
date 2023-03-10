@@ -2,9 +2,10 @@ package folk.sisby.switchy_proxy.modules.client;
 
 import com.mojang.datafixers.util.Pair;
 import folk.sisby.switchy.client.api.SwitchyClientEvents;
-import folk.sisby.switchy.client.api.SwitchySwitchScreenPosition;
-import folk.sisby.switchy.client.api.module.SwitchyDisplayModule;
-import folk.sisby.switchy.client.api.module.SwitchyDisplayModuleRegistry;
+import folk.sisby.switchy.client.api.module.SwitchyClientModule;
+import folk.sisby.switchy.client.api.module.SwitchyClientModuleRegistry;
+import folk.sisby.switchy.ui.api.SwitchySwitchScreenPosition;
+import folk.sisby.switchy.ui.api.module.SwitchyDisplayModule;
 import folk.sisby.switchy_proxy.ProxyTag;
 import folk.sisby.switchy_proxy.modules.ProxyModuleData;
 import io.wispforest.owo.ui.component.Components;
@@ -16,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Collectors;
 
-public class ProxyDisplayModule extends ProxyModuleData implements SwitchyDisplayModule, SwitchyClientEvents.Init {
+public class ProxyDisplayModule extends ProxyModuleData implements SwitchyClientModule, SwitchyDisplayModule, SwitchyClientEvents.Init {
 	@Override
 	public @Nullable Pair<Component, SwitchySwitchScreenPosition> getDisplayComponent() {
 		if (getTags().isEmpty()) return null;
@@ -25,6 +26,6 @@ public class ProxyDisplayModule extends ProxyModuleData implements SwitchyDispla
 
 	@Override
 	public void onInitialize() {
-		SwitchyDisplayModuleRegistry.registerModule(ID, ProxyDisplayModule::new);
+		SwitchyClientModuleRegistry.registerModule(ID, ProxyDisplayModule::new);
 	}
 }

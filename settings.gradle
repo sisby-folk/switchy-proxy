@@ -29,15 +29,15 @@ dependencyResolutionManagement {
 			version('ql', "0.17.10")
 			version('qm', "${mc}+build.21")
 			version('qsl', "3.0.0-beta.29+${mc}")
-			version('switchy', "2.0.0-beta.4+${mc_major}")
+			version('switchy', "2.0.0-beta.9+${mc_major}")
 
 			library('mc', 'mojang', 'minecraft').versionRef('mc')
 			library('ql', 'org.quiltmc', 'quilt-loader').versionRef('ql')
 			library('qm', 'org.quiltmc', 'quilt-mappings').versionRef('qm')
 			library('qsl', 'org.quiltmc', 'qsl').versionRef('qsl')
 			library('switchyCore', 'folk.sisby', 'switchy-core').versionRef('switchy')
+			library('switchyUI', 'folk.sisby', 'switchy-ui').versionRef('switchy')
 			library('switchyCompat', 'folk.sisby', 'switchy-compat').versionRef('switchy')
-
 			// Functionality
 
 			version('styledChat', '2.0.2+1.19.2')

@@ -46,6 +46,18 @@
 				"versions": ">=${switchy}"
 			},
 			{
+				"id": "switchy-client",
+				"versions": ">=${switchy}"
+			},
+			{
+				"id": "switchy-ui",
+				"versions": ">=${switchy}"
+			},
+			{
+				"id": "switchy-compat",
+				"versions": ">=${switchy}"
+			},
+			{
 				"id": "styledchat",
 				"versions": ">=${styledChat}"
 			}
