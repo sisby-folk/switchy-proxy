@@ -7,7 +7,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 
-public class ProxyModule extends ProxyModuleData implements SwitchyModule, SwitchyModuleClientable, SwitchyEvents.Init {
+public class ProxyModule extends ProxyModuleData implements SwitchyModule, SwitchyModuleTransferable, SwitchyEvents.Init {
 	public void updateFromPlayer(ServerPlayerEntity player, @Nullable String nextPreset) {
 	}
 

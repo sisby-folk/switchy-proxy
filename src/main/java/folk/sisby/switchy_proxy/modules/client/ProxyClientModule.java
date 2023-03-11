@@ -4,8 +4,8 @@ import com.mojang.datafixers.util.Pair;
 import folk.sisby.switchy.client.api.SwitchyClientEvents;
 import folk.sisby.switchy.client.api.module.SwitchyClientModule;
 import folk.sisby.switchy.client.api.module.SwitchyClientModuleRegistry;
-import folk.sisby.switchy.ui.api.SwitchySwitchScreenPosition;
-import folk.sisby.switchy.ui.api.module.SwitchyDisplayModule;
+import folk.sisby.switchy.ui.api.SwitchyUIPosition;
+import folk.sisby.switchy.ui.api.module.SwitchyUIModule;
 import folk.sisby.switchy_proxy.ProxyTag;
 import folk.sisby.switchy_proxy.modules.ProxyModuleData;
 import io.wispforest.owo.ui.component.Components;
@@ -17,15 +17,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Collectors;
 
-public class ProxyDisplayModule extends ProxyModuleData implements SwitchyClientModule, SwitchyDisplayModule, SwitchyClientEvents.Init {
+public class ProxyClientModule extends ProxyModuleData implements SwitchyClientModule, SwitchyUIModule, SwitchyClientEvents.Init {
 	@Override
-	public @Nullable Pair<Component, SwitchySwitchScreenPosition> getDisplayComponent() {
+	public @Nullable Pair<Component, SwitchyUIPosition> getPreviewComponent(String presetName) {
 		if (getTags().isEmpty()) return null;
-		return Pair.of(Components.label(Text.literal(getTags().stream().map(ProxyTag::toString).collect(Collectors.joining(" | "))).setStyle(Style.EMPTY.withItalic(true).withColor(Formatting.DARK_GRAY))), SwitchySwitchScreenPosition.LEFT);
+		return Pair.of(Components.label(Text.literal(getTags().stream().map(ProxyTag::toString).collect(Collectors.joining(" | "))).setStyle(Style.EMPTY.withItalic(true).withColor(Formatting.DARK_GRAY))), SwitchyUIPosition.LEFT);
 	}
 
 	@Override
 	public void onInitialize() {
-		SwitchyClientModuleRegistry.registerModule(ID, ProxyDisplayModule::new);
+		SwitchyClientModuleRegistry.registerModule(ID, ProxyClientModule::new);
 	}
 }

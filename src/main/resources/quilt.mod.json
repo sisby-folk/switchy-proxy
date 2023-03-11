@@ -25,7 +25,7 @@
 				"folk.sisby.switchy_proxy.modules.ProxyModule"
 			],
 			"client_events": [
-				"folk.sisby.switchy_proxy.modules.client.ProxyDisplayModule"
+				"folk.sisby.switchy_proxy.modules.client.ProxyClientModule"
 			]
 		},
 		"depends": [

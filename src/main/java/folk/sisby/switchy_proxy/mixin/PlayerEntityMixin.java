@@ -3,8 +3,8 @@ package folk.sisby.switchy_proxy.mixin;
 import folk.sisby.switchy.api.SwitchyPlayer;
 import folk.sisby.switchy.api.presets.SwitchyPreset;
 import folk.sisby.switchy.api.presets.SwitchyPresets;
-import folk.sisby.switchy.modules.DrogtorCompat;
-import folk.sisby.switchy.modules.StyledNicknamesCompat;
+import folk.sisby.switchy.modules.DrogtorModule;
+import folk.sisby.switchy.modules.StyledNicknamesModule;
 import folk.sisby.switchy_proxy.SwitchyProxy;
 import folk.sisby.switchy_proxy.SwitchyProxyPlayer;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,7 +26,7 @@ public class PlayerEntityMixin implements SwitchyProxyPlayer {
 				SwitchyPreset preset = presets.getPreset(matchedPreset);
 				if (SwitchyProxy.StyledCompat) {
 					try {
-						Text nickname = preset.getModule(StyledNicknamesCompat.ID, StyledNicknamesCompat.class).getText();
+						Text nickname = preset.getModule(StyledNicknamesModule.ID, StyledNicknamesModule.class).getText();
 						if (nickname != null) {
 							return nickname;
 						}
@@ -35,7 +35,7 @@ public class PlayerEntityMixin implements SwitchyProxyPlayer {
 				}
 				if (SwitchyProxy.DrogtorCompat) {
 					try {
-						Text nickname = preset.getModule(DrogtorCompat.ID, DrogtorCompat.class).getText();
+						Text nickname = preset.getModule(DrogtorModule.ID, DrogtorModule.class).getText();
 						if (nickname != null) {
 							return nickname;
 						}
