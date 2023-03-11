@@ -1,5 +1,7 @@
-# switchy-proxy
+# Switchy Proxy
 An addon for [Switchy](https://modrinth.com/mod/switchy) that adds per-message nickname swapping using pattern matching.
+
+Requires [Styled Chat](https://modrinth.com/mod/styled-chat)
 
 ### Usage
 
