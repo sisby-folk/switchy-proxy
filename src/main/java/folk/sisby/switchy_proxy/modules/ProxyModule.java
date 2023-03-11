@@ -2,7 +2,6 @@ package folk.sisby.switchy_proxy.modules;
 
 import folk.sisby.switchy.api.SwitchyEvents;
 import folk.sisby.switchy.api.module.*;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
@@ -13,11 +12,6 @@ public class ProxyModule extends ProxyModuleData implements SwitchyModule, Switc
 
 	@Override
 	public void applyToPlayer(ServerPlayerEntity player) {
-	}
-
-	@Override
-	public NbtCompound toClientNbt() {
-		return toNbt();
 	}
 
 	@Override
