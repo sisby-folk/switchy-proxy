@@ -23,7 +23,7 @@ public class PlayerEntityMixin implements SwitchyProxyPlayer {
 		if (matchedPreset != null && (Object) this instanceof SwitchyPlayer sp) {
 			SwitchyPresets presets = sp.switchy$getPresets();
 			try {
-				SwitchyPreset preset = presets.getPreset(matchedPreset);
+				SwitchyPreset preset = matchedPreset.equals("") ? presets.getCurrentPreset() : presets.getPreset(matchedPreset);
 				if (SwitchyProxy.StyledCompat) {
 					try {
 						Text nickname = preset.getModule(StyledNicknamesModule.ID, StyledNicknamesModule.class).getText();

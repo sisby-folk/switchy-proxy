@@ -39,6 +39,10 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 						}
 						SwitchyProxy.LOGGER.info("[Switchy Proxy] Original | <{}> {}", player.getGameProfile().getName(), content);
 						return match.strip(content);
+					} else {
+						if (player instanceof SwitchyProxyPlayer spp) {
+							spp.switchy_proxy$setMatchedPreset("");
+						}
 					}
 				}
 			}
