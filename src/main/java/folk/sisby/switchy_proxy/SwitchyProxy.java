@@ -22,7 +22,7 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 
 	@Override
 	public void onInitialize() {
-		if (QuiltLoader.isModLoaded("drogtor")) DrogtorCompat = true;
+		if (QuiltLoader.isModLoaded("drogtor") && !QuiltLoader.isModLoaded("drogstyle") ) DrogtorCompat = true;
 		if (QuiltLoader.isModLoaded("styled-nicknames")) StyledCompat = true;
 
 		StyledChatEvents.PRE_MESSAGE_CONTENT.register((content, placeholderContext) -> {
