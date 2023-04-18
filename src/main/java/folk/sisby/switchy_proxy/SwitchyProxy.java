@@ -5,6 +5,7 @@ import folk.sisby.switchy.api.SwitchyEvents;
 import folk.sisby.switchy.api.SwitchyPlayer;
 import folk.sisby.switchy.api.presets.SwitchyPreset;
 import folk.sisby.switchy.api.presets.SwitchyPresets;
+import folk.sisby.switchy.modules.DrogtorModule;
 import folk.sisby.switchy_proxy.modules.ProxyModule;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -21,7 +22,7 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 	public void onInitialize() {
 		StyledChatEvents.PRE_MESSAGE_CONTENT.register((content, placeholderContext) -> {
 			ServerPlayerEntity player = placeholderContext.player();
-			if (player instanceof SwitchyPlayer sp) {
+			if (player instanceof SwitchyPlayer sp && player instanceof SwitchyProxyPlayer spp) {
 				SwitchyPresets presets = sp.switchy$getPresets();
 				for (Map.Entry<String, ProxyModule> entry : presets.getAllOfModule(ProxyModule.ID, ProxyModule.class).entrySet()) {
 					String name = entry.getKey();
@@ -29,15 +30,15 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 					ProxyTag match = module.getTags().stream().filter(tag -> tag.matches(content)).findFirst().orElse(null);
 					if (match != null) {
 						SwitchyPreset preset = presets.getPreset(name);
-						if (player instanceof SwitchyProxyPlayer spp) {
-							if (spp.switchy_proxy$getMatchedPreset() == null) {
-								SwitchyProxy.LOGGER.info("[Switchy Proxy] Original | <{}> {}", player.getGameProfile().getName(), content);
-							}
-							spp.switchy_proxy$setMatchedPreset(preset);
+						if (spp.switchy_proxy$getMatchedPreset() == null) {
+							SwitchyProxy.LOGGER.info("[Switchy Proxy] Original | <{}> {}", player.getGameProfile().getName(), content);
 						}
+						spp.switchy_proxy$setMatchedPreset(preset);
 						return match.strip(content);
 					}
 				}
+				// Fix styled chat breaking drogtor coloured nicknames by forcing the mixin route
+				if (presets.containsModule(DrogtorModule.ID) && presets.isModuleEnabled(DrogtorModule.ID)) spp.switchy_proxy$setMatchedPreset(presets.getCurrentPreset());
 			}
 			return content;
 		});
