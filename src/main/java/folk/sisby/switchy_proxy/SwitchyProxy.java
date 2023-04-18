@@ -3,11 +3,14 @@ package folk.sisby.switchy_proxy;
 import eu.pb4.styledchat.StyledChatEvents;
 import folk.sisby.switchy.api.SwitchyEvents;
 import folk.sisby.switchy.api.SwitchyPlayer;
+import folk.sisby.switchy.api.presets.SwitchyPreset;
 import folk.sisby.switchy.api.presets.SwitchyPresets;
+import folk.sisby.switchy_proxy.compat.DrogtorCompat;
+import folk.sisby.switchy_proxy.compat.StyledNicknamesCompat;
 import folk.sisby.switchy_proxy.modules.ProxyModule;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.minecraft.server.network.ServerPlayerEntity;
-import org.quiltmc.loader.api.QuiltLoader;
+import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,14 +20,11 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 	public static final String ID = "switchy_proxy";
 	public static final Logger LOGGER = LoggerFactory.getLogger(ID);
 
-	public static boolean StyledCompat = false;
-	public static boolean DrogtorCompat = false;
+	private static final Identifier DROGTOR_ID = new Identifier("switchy", "drogtor");
+	private static final Identifier STYLED_ID = new Identifier("switchy", "styled_nicknames");
 
 	@Override
 	public void onInitialize() {
-		if (QuiltLoader.isModLoaded("drogtor") && !QuiltLoader.isModLoaded("drogstyle") ) DrogtorCompat = true;
-		if (QuiltLoader.isModLoaded("styled-nicknames")) StyledCompat = true;
-
 		StyledChatEvents.PRE_MESSAGE_CONTENT.register((content, placeholderContext) -> {
 			ServerPlayerEntity player = placeholderContext.player();
 			if (player instanceof SwitchyPlayer sp) {
@@ -34,15 +34,17 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 					ProxyModule module = entry.getValue();
 					ProxyTag match = module.getTags().stream().filter(tag -> tag.matches(content)).findFirst().orElse(null);
 					if (match != null) {
-						if (player instanceof SwitchyProxyPlayer spp) {
-							spp.switchy_proxy$setMatchedPreset(name);
+						SwitchyPreset preset = presets.getPreset(name);
+						if (presets.containsModule(DROGTOR_ID) && presets.isModuleEnabled(DROGTOR_ID)) {
+							DrogtorCompat.update(player, presets.getCurrentPreset());
+							DrogtorCompat.apply(player, preset);
+						}
+						if (presets.containsModule(STYLED_ID) && presets.isModuleEnabled(STYLED_ID)) {
+							StyledNicknamesCompat.update(player, presets.getCurrentPreset());
+							StyledNicknamesCompat.apply(player, preset);
 						}
 						SwitchyProxy.LOGGER.info("[Switchy Proxy] Original | <{}> {}", player.getGameProfile().getName(), content);
 						return match.strip(content);
-					} else {
-						if (player instanceof SwitchyProxyPlayer spp) {
-							spp.switchy_proxy$setMatchedPreset("");
-						}
 					}
 				}
 			}
@@ -50,8 +52,14 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 		});
 
 		ServerMessageEvents.CHAT_MESSAGE.register(((message, sender, params) -> {
-			if (sender instanceof SwitchyProxyPlayer spp) {
-				spp.switchy_proxy$setMatchedPreset(null);
+			if (sender instanceof SwitchyPlayer sp) {
+				SwitchyPresets presets = sp.switchy$getPresets();
+				if (presets.containsModule(DROGTOR_ID) && presets.isModuleEnabled(DROGTOR_ID)) {
+					DrogtorCompat.apply(sender, presets.getCurrentPreset());
+				}
+				if (presets.containsModule(STYLED_ID) && presets.isModuleEnabled(STYLED_ID)) {
+					StyledNicknamesCompat.apply(sender, presets.getCurrentPreset());
+				}
 			}
 		}));
 	}

@@ -62,6 +62,5 @@
 				"versions": ">=${styledChat}"
 			}
 		]
-	},
-	"mixin": "switchy-proxy.mixins.json"
+	}
 }
