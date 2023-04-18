@@ -38,7 +38,10 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 					}
 				}
 				// Fix styled chat breaking drogtor coloured nicknames by forcing the mixin route
-				if (presets.containsModule(DrogtorModule.ID) && presets.isModuleEnabled(DrogtorModule.ID)) spp.switchy_proxy$setMatchedPreset(presets.getCurrentPreset());
+				if (presets.containsModule(DrogtorModule.ID) && presets.isModuleEnabled(DrogtorModule.ID)) {
+					presets.getCurrentPreset().getModule(DrogtorModule.ID, DrogtorModule.class).updateFromPlayer(player, null);
+					spp.switchy_proxy$setMatchedPreset(presets.getCurrentPreset());
+				}
 			}
 			return content;
 		});
