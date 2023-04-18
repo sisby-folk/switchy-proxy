@@ -30,10 +30,10 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 					if (match != null) {
 						SwitchyPreset preset = presets.getPreset(name);
 						if (player instanceof SwitchyProxyPlayer spp) {
-							spp.switchy_proxy$setMatchedPreset(preset);
-							if (spp.switchy_proxy$getMatchedPreset() != null) {
+							if (spp.switchy_proxy$getMatchedPreset() == null) {
 								SwitchyProxy.LOGGER.info("[Switchy Proxy] Original | <{}> {}", player.getGameProfile().getName(), content);
 							}
+							spp.switchy_proxy$setMatchedPreset(preset);
 						}
 						return match.strip(content);
 					}
@@ -44,6 +44,12 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 
 		ServerMessageEvents.CHAT_MESSAGE.register(((message, sender, params) -> {
 			if (sender instanceof SwitchyProxyPlayer spp) {
+				spp.switchy_proxy$setMatchedPreset(null);
+			}
+		}));
+
+		ServerMessageEvents.COMMAND_MESSAGE.register(((message, source, params) -> {
+			if (source.m_ozupobtn() instanceof SwitchyProxyPlayer spp) {
 				spp.switchy_proxy$setMatchedPreset(null);
 			}
 		}));
