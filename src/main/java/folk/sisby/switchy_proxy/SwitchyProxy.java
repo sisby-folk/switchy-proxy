@@ -29,18 +29,23 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 			ServerPlayerEntity player = placeholderContext.player();
 			if (player instanceof SwitchyPlayer sp) {
 				SwitchyPresets presets = sp.switchy$getPresets();
+				if (presets.containsModule(DROGTOR_ID) && presets.isModuleEnabled(DROGTOR_ID)) {
+					DrogtorCompat.update(player, presets.getCurrentPreset());
+				}
+				if (presets.containsModule(STYLED_ID) && presets.isModuleEnabled(STYLED_ID)) {
+					StyledNicknamesCompat.update(player, presets.getCurrentPreset());
+				}
 				for (Map.Entry<String, ProxyModule> entry : presets.getAllOfModule(ProxyModule.ID, ProxyModule.class).entrySet()) {
 					String name = entry.getKey();
 					ProxyModule module = entry.getValue();
 					ProxyTag match = module.getTags().stream().filter(tag -> tag.matches(content)).findFirst().orElse(null);
 					if (match != null) {
+						SwitchyProxy.LOGGER.info("AAAAA");
 						SwitchyPreset preset = presets.getPreset(name);
 						if (presets.containsModule(DROGTOR_ID) && presets.isModuleEnabled(DROGTOR_ID)) {
-							DrogtorCompat.update(player, presets.getCurrentPreset());
 							DrogtorCompat.apply(player, preset);
 						}
 						if (presets.containsModule(STYLED_ID) && presets.isModuleEnabled(STYLED_ID)) {
-							StyledNicknamesCompat.update(player, presets.getCurrentPreset());
 							StyledNicknamesCompat.apply(player, preset);
 						}
 						SwitchyProxy.LOGGER.info("[Switchy Proxy] Original | <{}> {}", player.getGameProfile().getName(), content);
@@ -54,10 +59,13 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 		ServerMessageEvents.CHAT_MESSAGE.register(((message, sender, params) -> {
 			if (sender instanceof SwitchyPlayer sp) {
 				SwitchyPresets presets = sp.switchy$getPresets();
+				SwitchyProxy.LOGGER.info("GGGG");
 				if (presets.containsModule(DROGTOR_ID) && presets.isModuleEnabled(DROGTOR_ID)) {
+					SwitchyProxy.LOGGER.info("HHHH");
 					DrogtorCompat.apply(sender, presets.getCurrentPreset());
 				}
 				if (presets.containsModule(STYLED_ID) && presets.isModuleEnabled(STYLED_ID)) {
+					SwitchyProxy.LOGGER.info("IIII");
 					StyledNicknamesCompat.apply(sender, presets.getCurrentPreset());
 				}
 			}
