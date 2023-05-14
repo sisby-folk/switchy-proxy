@@ -1,43 +1,20 @@
 {
-  "lib39:enable_enhanced_lang": true,
-  "commands": {
-    "switchy_proxy": {
-      "add": {
-        "command": "/switchy proxy add {} {}",
-        "help": "adds a proxy pattern",
-        "success": "Successfully added {} proxy to {}",
-        "fail": {
-          "preset": "That preset doesn't exist! Try {}",
-          "module": "The proxies module is disabled! Try {}",
-          "invalid": "Invalid proxy format. Should include {}"
-        }
-      },
-      "remove": {
-        "command": "/switchy proxy remove {} {}",
-        "help": "removes a proxy",
-        "success": "Successfully removed {} proxy from {}",
-        "fail": {
-          "preset": "That preset doesn't exist! Try {}",
-          "module": "The proxies module is disabled! Try {}",
-          "pattern": "That proxy doesn't exist!"
-        }
-      },
-      "placeholder": {
-        "preset": "[name]",
-        "proxy": "[pattern]"
-      }
-    }
-  },
-  "switchy": {
-    "switchy_proxy": {
-      "module": {
-        "proxies": {
-          "description": "A module that holds \"proxy tags\" that allow using other presets' nicknames for individual messages.",
-          "enabled": "You will be able to use and add proxies with /switchy proxy.",
-          "disabled": "You will not be able to use or add proxies.",
-          "warning": "All proxy tags will be cleared!"
-        }
-      }
-    }
-  }
+  "commands.switchy_proxy.add.command": "/switchy proxy add %s %s",
+  "commands.switchy_proxy.add.help": "adds a proxy pattern",
+  "commands.switchy_proxy.add.success": "Successfully added %s proxy to %s",
+  "commands.switchy_proxy.add.fail.preset": "That preset doesn't exist! Try %s",
+  "commands.switchy_proxy.add.fail.module": "The proxies module is disabled! Try %s",
+  "commands.switchy_proxy.add.fail.invalid": "Invalid proxy format. Should include %s",
+  "commands.switchy_proxy.remove.command": "/switchy proxy remove %s %s",
+  "commands.switchy_proxy.remove.help": "removes a proxy",
+  "commands.switchy_proxy.remove.success": "Successfully removed %s proxy from %s",
+  "commands.switchy_proxy.remove.fail.preset": "That preset doesn't exist! Try %s",
+  "commands.switchy_proxy.remove.fail.module": "The proxies module is disabled! Try %s",
+  "commands.switchy_proxy.remove.fail.pattern": "That proxy doesn't exist!",
+  "commands.switchy_proxy.placeholder.preset": "[name]",
+  "commands.switchy_proxy.placeholder.proxy": "[pattern]",
+  "switchy.switchy_proxy.module.proxies.description": "A module that holds \"proxy tags\" that allow using other presets' nicknames for individual messages.",
+  "switchy.switchy_proxy.module.proxies.enabled": "You will be able to use and add proxies with /switchy proxy.",
+  "switchy.switchy_proxy.module.proxies.disabled": "You will not be able to use or add proxies.",
+  "switchy.switchy_proxy.module.proxies.warning": "All proxy tags will be cleared!"
 }
