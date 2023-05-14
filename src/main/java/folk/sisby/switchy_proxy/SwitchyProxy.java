@@ -53,7 +53,7 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 		}));
 
 		ServerMessageEvents.COMMAND_MESSAGE.register(((message, source, params) -> {
-			if (source.m_ozupobtn() instanceof SwitchyProxyPlayer spp) {
+			if (source.method_44023() instanceof SwitchyProxyPlayer spp) {
 				spp.switchy_proxy$setMatchedPreset(null);
 			}
 		}));

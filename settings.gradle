@@ -27,14 +27,16 @@ dependencyResolutionManagement {
 			// // Base // //
 			version('mc', mc)
 			version('ql', "0.17.10")
-			version('qm', "${mc}+build.21")
+			version('qm', "${mc}+build.22")
 			version('qsl', "3.0.0-beta.29+${mc}")
+			version('qfapi', "4.0.0-beta.30+0.76.0-${mc}")
 			version('switchy', "2.1.1+${mc_major}")
 
 			library('mc', 'mojang', 'minecraft').versionRef('mc')
 			library('ql', 'org.quiltmc', 'quilt-loader').versionRef('ql')
 			library('qm', 'org.quiltmc', 'quilt-mappings').versionRef('qm')
 			library('qsl', 'org.quiltmc', 'qsl').versionRef('qsl')
+			library('qfapi', 'org.quiltmc.quilted-fabric-api', 'quilted-fabric-api',).versionRef('qfapi')
 			library('switchyCore', 'folk.sisby', 'switchy-core').versionRef('switchy')
 			library('switchyUI', 'folk.sisby', 'switchy-ui').versionRef('switchy')
 			library('switchyCompat', 'folk.sisby', 'switchy-compat').versionRef('switchy')
@@ -45,6 +47,12 @@ dependencyResolutionManagement {
 
 			library('styledChat', 'maven.modrinth', 'styled-chat').versionRef('styledChat')
 			library('placeholder', 'eu.pb4', 'placeholder-api').versionRef('placeholder')
+
+			// // mom, loom broke transitive dependencies again // //
+			version('owo', "0.9.3+${mc_major}")
+
+			library('owo', 'io.wispforest', 'owo-lib').versionRef('owo')
+			library('switchyClient', 'folk.sisby', 'switchy-client').versionRef('switchy')
 		}
 	}
 }

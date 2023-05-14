@@ -54,8 +54,7 @@ public class ChatStyleMixin {
 
 	@ModifyArgs(method = "getSayCommand", at = @At(value = "INVOKE", target = "Leu/pb4/placeholders/api/Placeholders;parseText(Lnet/minecraft/text/Text;Ljava/util/regex/Pattern;Ljava/util/Map;)Lnet/minecraft/text/Text;"))
 	public void proxySay(Args args, ServerCommandSource source, Text message) {
-		ServerPlayerEntity player = source.m_ozupobtn();
-		if (player instanceof SwitchyProxyPlayer spp) {
+		if (source.method_44023() instanceof SwitchyProxyPlayer spp) {
 			Map<String, Text> placeholders = new HashMap<>(args.get(2));
 			if (proxyDisplayName(spp, t -> {
 				placeholders.put("player", t);
@@ -68,8 +67,7 @@ public class ChatStyleMixin {
 
 	@ModifyArgs(method = "getMeCommand", at = @At(value = "INVOKE", target = "Leu/pb4/placeholders/api/Placeholders;parseText(Lnet/minecraft/text/Text;Ljava/util/regex/Pattern;Ljava/util/Map;)Lnet/minecraft/text/Text;"))
 	public void proxyMe(Args args, ServerCommandSource source, Text message) {
-		ServerPlayerEntity player = source.m_ozupobtn();
-		if (player instanceof SwitchyProxyPlayer spp) {
+		if (source.method_44023() instanceof SwitchyProxyPlayer spp) {
 			Map<String, Text> placeholders = new HashMap<>(args.get(2));
 			if (proxyDisplayName(spp, t -> {
 				placeholders.put("player", t);

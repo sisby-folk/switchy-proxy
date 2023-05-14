@@ -103,8 +103,11 @@ dependencies {
 	mappings variantOf(libs.qm) { classifier "intermediary-v2" }
 	modImplementation libs.ql
 	modImplementation libs.qsl
+	modImplementation libs.qfapi
 
 	modImplementation libs.switchyCore
+	modImplementation libs.switchyClient
+	modImplementation libs.owo
 	modImplementation libs.switchyUI
 	modImplementation libs.switchyCompat
 	modImplementation libs.styledChat
