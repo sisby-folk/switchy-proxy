@@ -102,16 +102,12 @@ dependencies {
 	minecraft libs.mc
 	mappings variantOf(libs.qm) { classifier "intermediary-v2" }
 	modImplementation libs.ql
-	modImplementation libs.qsl
 	modImplementation libs.qfapi
 
-	modImplementation libs.switchyCore
-	modImplementation libs.switchyClient
-	modImplementation libs.owo
 	modImplementation libs.switchyUI
 	modImplementation libs.switchyCompat
-	modImplementation libs.styledChat
 	modImplementation libs.placeholder
+	modImplementation libs.styledChat
 }
 
 processResources {
@@ -119,7 +115,6 @@ processResources {
 			"version": version.toString(),
 			"mc"  : libs.versions.mc.get(),
 			"ql"  : libs.versions.ql.get(),
-			"qsl"  : libs.versions.qsl.get(),
 			"switchy": libs.versions.switchy.get(),
 			"styledChat": libs.versions.styledChat.get()
 	]
