@@ -8,18 +8,14 @@ import folk.sisby.switchy_proxy.SwitchyProxyPlayer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArgs;
-import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Consumer;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ChatStyle.class)
 public class ChatStyleMixin {
-	private boolean proxyDisplayName(SwitchyProxyPlayer spp, Consumer<Text> nameSetter) {
+	private @Nullable Text proxyDisplayName(SwitchyProxyPlayer spp) {
 		SwitchyPreset preset = spp.switchy_proxy$getMatchedPreset();
 		if (preset != null) {
 			spp.switchy_proxy$setMatchedPreset(null);
@@ -27,54 +23,49 @@ public class ChatStyleMixin {
 			if (preset.containsModule(StyledNicknamesModule.ID)) {
 				Text nickname = preset.getModule(StyledNicknamesModule.ID, StyledNicknamesModule.class).getText();
 				if (nickname != null) {
-					nameSetter.accept(nickname);
-					return true;
+					return nickname;
 				}
 			}
 			if (preset.containsModule(DrogtorModule.ID)) {
 				Text nickname = preset.getModule(DrogtorModule.ID, DrogtorModule.class).getText();
 				if (nickname != null) {
-					nameSetter.accept(nickname);
-					return true;
+					return nickname;
 				}
 			}
 		}
-		return false;
+		return null;
 	}
 
-	@ModifyArgs(method = "getChat", at = @At(value = "INVOKE", target = "Leu/pb4/placeholders/api/Placeholders;parseText(Leu/pb4/placeholders/api/node/TextNode;Leu/pb4/placeholders/api/PlaceholderContext;Ljava/util/regex/Pattern;Ljava/util/Map;)Lnet/minecraft/text/Text;"))
-	public void proxyChat(Args args, ServerPlayerEntity player, Text message) {
+	@Redirect(method = "getChat", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;getDisplayName()Lnet/minecraft/text/Text;"))
+	public Text proxyChat(ServerPlayerEntity player) {
 		if (player instanceof SwitchyProxyPlayer spp) {
-			Map<String, Text> placeholders = new HashMap<>(args.get(3));
-			if (proxyDisplayName(spp, t -> placeholders.put("player", t))) {
-				args.set(3, placeholders);
+			Text proxyName = proxyDisplayName(spp);
+			if (proxyName != null) {
+				return proxyName;
 			}
 		}
+		return player.getDisplayName();
 	}
 
-	@ModifyArgs(method = "getSayCommand", at = @At(value = "INVOKE", target = "Leu/pb4/placeholders/api/Placeholders;parseText(Lnet/minecraft/text/Text;Ljava/util/regex/Pattern;Ljava/util/Map;)Lnet/minecraft/text/Text;"))
-	public void proxySay(Args args, ServerCommandSource source, Text message) {
-		if (source.method_44023() instanceof SwitchyProxyPlayer spp) {
-			Map<String, Text> placeholders = new HashMap<>(args.get(2));
-			if (proxyDisplayName(spp, t -> {
-				placeholders.put("player", t);
-				placeholders.put("displayName", t);
-			})) {
-				args.set(2, placeholders);
+	@Redirect(method = "getSayCommand", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/command/ServerCommandSource;getDisplayName()Lnet/minecraft/text/Text;"))
+	public Text proxySay(ServerCommandSource source) {
+		if (source.getPlayer() instanceof SwitchyProxyPlayer spp) {
+			Text proxyName = proxyDisplayName(spp);
+			if (proxyName != null) {
+				return proxyName;
 			}
 		}
+		return source.getDisplayName();
 	}
 
-	@ModifyArgs(method = "getMeCommand", at = @At(value = "INVOKE", target = "Leu/pb4/placeholders/api/Placeholders;parseText(Lnet/minecraft/text/Text;Ljava/util/regex/Pattern;Ljava/util/Map;)Lnet/minecraft/text/Text;"))
-	public void proxyMe(Args args, ServerCommandSource source, Text message) {
-		if (source.method_44023() instanceof SwitchyProxyPlayer spp) {
-			Map<String, Text> placeholders = new HashMap<>(args.get(2));
-			if (proxyDisplayName(spp, t -> {
-				placeholders.put("player", t);
-				placeholders.put("displayName", t);
-			})) {
-				args.set(2, placeholders);
+	@Redirect(method = "getMeCommand", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/command/ServerCommandSource;getDisplayName()Lnet/minecraft/text/Text;"))
+	public Text proxyMe(ServerCommandSource source) {
+		if (source.getPlayer() instanceof SwitchyProxyPlayer spp) {
+			Text proxyName = proxyDisplayName(spp);
+			if (proxyName != null) {
+				return proxyName;
 			}
 		}
+		return source.getDisplayName();
 	}
 }
