@@ -2,7 +2,6 @@ package folk.sisby.switchy_proxy.mixin;
 
 import eu.pb4.styledchat.config.ChatStyle;
 import folk.sisby.switchy.api.presets.SwitchyPreset;
-import folk.sisby.switchy.modules.DrogtorModule;
 import folk.sisby.switchy.modules.StyledNicknamesModule;
 import folk.sisby.switchy_proxy.SwitchyProxyPlayer;
 import net.minecraft.server.command.ServerCommandSource;
@@ -19,18 +18,8 @@ public class ChatStyleMixin {
 		SwitchyPreset preset = spp.switchy_proxy$getMatchedPreset();
 		if (preset != null) {
 			spp.switchy_proxy$setMatchedPreset(null);
-
 			if (preset.containsModule(StyledNicknamesModule.ID)) {
-				Text nickname = preset.getModule(StyledNicknamesModule.ID, StyledNicknamesModule.class).getText();
-				if (nickname != null) {
-					return nickname;
-				}
-			}
-			if (preset.containsModule(DrogtorModule.ID)) {
-				Text nickname = preset.getModule(DrogtorModule.ID, DrogtorModule.class).getText();
-				if (nickname != null) {
-					return nickname;
-				}
+				return preset.getModule(StyledNicknamesModule.ID, StyledNicknamesModule.class).getText();
 			}
 		}
 		return null;

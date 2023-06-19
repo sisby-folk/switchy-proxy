@@ -1,7 +1,7 @@
 # Switchy Proxy
 An addon for [Switchy](https://modrinth.com/mod/switchy) that adds per-message nickname swapping using pattern matching.
 
-Works with [Drogstyle](https://modrinth.com/mod/drogstyle), [Styled Nicknames](https://modrinth.com/mod/styled-nicknames), and [Drogtor](https://modrinth.com/mod/drogtor). Requires [Styled Chat](https://modrinth.com/mod/styled-chat).
+Works with [Styled Nicknames](https://modrinth.com/mod/styled-nicknames) (and [Drogstyle](https://modrinth.com/mod/drogstyle)). Requires [Styled Chat](https://modrinth.com/mod/styled-chat).
 
 ### Usage
 

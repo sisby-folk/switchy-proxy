@@ -5,7 +5,6 @@ import folk.sisby.switchy.api.SwitchyEvents;
 import folk.sisby.switchy.api.SwitchyPlayer;
 import folk.sisby.switchy.api.presets.SwitchyPreset;
 import folk.sisby.switchy.api.presets.SwitchyPresets;
-import folk.sisby.switchy.modules.DrogtorModule;
 import folk.sisby.switchy_proxy.modules.ProxyModule;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -36,11 +35,6 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 						spp.switchy_proxy$setMatchedPreset(preset);
 						return match.strip(content);
 					}
-				}
-				// Fix styled chat breaking drogtor coloured nicknames by forcing the mixin route
-				if (presets.containsModule(DrogtorModule.ID) && presets.isModuleEnabled(DrogtorModule.ID)) {
-					presets.getCurrentPreset().getModule(DrogtorModule.ID, DrogtorModule.class).updateFromPlayer(player, null);
-					spp.switchy_proxy$setMatchedPreset(presets.getCurrentPreset());
 				}
 			}
 			return content;
