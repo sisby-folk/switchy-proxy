@@ -1,5 +1,6 @@
 package folk.sisby.switchy_proxy;
 
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -16,6 +17,7 @@ import folk.sisby.switchy.api.presets.SwitchyPresets;
 import folk.sisby.switchy.util.Feedback;
 import folk.sisby.switchy.util.SwitchyCommand;
 import folk.sisby.switchy_proxy.modules.ProxyModule;
+import folk.sisby.switchy_proxy.modules.ProxyModuleConfig;
 import net.minecraft.command.CommandSource;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -33,6 +35,24 @@ import static folk.sisby.switchy.util.Feedback.literal;
 import static folk.sisby.switchy.util.SwitchyCommand.execute;
 
 public class SwitchyProxyCommands implements SwitchyEvents.CommandInit {
+	public static final LiteralArgumentBuilder<ServerCommandSource> COMMAND_ADD = CommandManager.literal("add")
+		.then(SwitchyCommand.presetArgument(true)
+			.then(CommandManager.argument("pattern", StringArgumentType.greedyString())
+				.executes(c -> execute(c, (pl, pr, f) -> addProxy(pr, f, c.getArgument("preset", String.class), c.getArgument("pattern", String.class))))
+			)
+		);
+	public static final LiteralArgumentBuilder<ServerCommandSource> COMMAND_REMOVE = CommandManager.literal("remove")
+		.then(SwitchyCommand.presetArgument(true)
+			.then(CommandManager.argument("pattern", StringArgumentType.greedyString())
+				.suggests(SwitchyProxyCommands::suggestPatterns)
+				.executes(c -> execute(c, (pl, pr, f) -> removeProxy(pr, f, c.getArgument("preset", String.class), c.getArgument("pattern", String.class))))
+			)
+		);
+	public static final LiteralArgumentBuilder<ServerCommandSource> COMMAND_LATCH = CommandManager.literal("latch")
+		.then(CommandManager.argument("enable", BoolArgumentType.bool())
+			.executes(c -> execute(c, (pl, pr, f) -> setLatch(pr, f, c.getArgument("enable", Boolean.class))))
+		);
+
 
 	public static CompletableFuture<Suggestions> suggestPatterns(CommandContext<ServerCommandSource> context, SuggestionsBuilder builder) throws CommandSyntaxException {
 		SwitchyPresets presets = ((SwitchyPlayer) context.getSource().getPlayer()).switchy$getPresets();
@@ -46,7 +66,7 @@ public class SwitchyProxyCommands implements SwitchyEvents.CommandInit {
 		return builder.buildFuture();
 	}
 
-	public SwitchyFeedbackStatus addProxy(SwitchyPresets presets, Consumer<Text> feedback, String name, String pattern) {
+	public static SwitchyFeedbackStatus addProxy(SwitchyPresets presets, Consumer<Text> feedback, String name, String pattern) {
 		try {
 			SwitchyPreset preset = presets.getPreset(name);
 			try {
@@ -69,7 +89,7 @@ public class SwitchyProxyCommands implements SwitchyEvents.CommandInit {
 		}
 	}
 
-	public SwitchyFeedbackStatus removeProxy(SwitchyPresets presets, Consumer<Text> feedback, String name, String pattern) {
+	public static SwitchyFeedbackStatus removeProxy(SwitchyPresets presets, Consumer<Text> feedback, String name, String pattern) {
 		try {
 			SwitchyPreset preset = presets.getPreset(name);
 			try {
@@ -92,25 +112,28 @@ public class SwitchyProxyCommands implements SwitchyEvents.CommandInit {
 		}
 	}
 
+	private static SwitchyFeedbackStatus setLatch(SwitchyPresets presets, Consumer<Text> feedback, Boolean enable) {
+		try {
+			presets.getModuleConfig(ProxyModule.ID, ProxyModuleConfig.class).setLatchEnabled(enable);
+			feedback.accept(Feedback.success("commands.switchy_proxy.latch.success.%s".formatted(enable ? "enabled" : "disabled")));
+			return SwitchyFeedbackStatus.SUCCESS;
+		} catch (IllegalStateException ignoredModuleDisabled) {
+			feedback.accept(Feedback.invalidTry("commands.switchy_proxy.latch.fail.module", "commands.switchy.module.enable.command", literal(ProxyModule.ID.toString())));
+			return SwitchyFeedbackStatus.INVALID;
+		}
+	}
+
 	@Override
 	public void registerCommands(LiteralArgumentBuilder<ServerCommandSource> switchyArgument, BiConsumer<Text, Predicate<ServerPlayerEntity>> helpTextRegistry) {
 		switchyArgument
-				.then(CommandManager.literal("proxy")
-						.then(SwitchyCommand.presetArgument(true)
-								.then(CommandManager.literal("add")
-										.then(CommandManager.argument("pattern", StringArgumentType.greedyString())
-												.executes(c -> execute(c, (pl, pr, f) -> addProxy(pr, f, c.getArgument("preset", String.class), c.getArgument("pattern", String.class)))))
-								)
-								.then(CommandManager.literal("remove")
-										.then(CommandManager.argument("pattern", StringArgumentType.greedyString())
-												.suggests(SwitchyProxyCommands::suggestPatterns)
-												.executes(c -> execute(c, (pl, pr, f) -> removeProxy(pr, f, c.getArgument("preset", String.class), c.getArgument("pattern", String.class)))))
-								)
-						)
-				);
+			.then(CommandManager.literal("proxy")
+				.then(COMMAND_ADD)
+				.then(COMMAND_REMOVE)
+				.then(COMMAND_LATCH)
+			);
 		List.of(
-				helpText("commands.switchy_proxy.add.help", "commands.switchy_proxy.add.command","commands.switchy_proxy.placeholder.preset", "commands.switchy_proxy.placeholder.proxy"),
-				helpText("commands.switchy_proxy.remove.help", "commands.switchy_proxy.remove.command","commands.switchy_proxy.placeholder.preset", "commands.switchy_proxy.placeholder.proxy")
+			helpText("commands.switchy_proxy.add.help", "commands.switchy_proxy.add.command", "commands.switchy_proxy.placeholder.preset", "commands.switchy_proxy.placeholder.proxy"),
+			helpText("commands.switchy_proxy.remove.help", "commands.switchy_proxy.remove.command", "commands.switchy_proxy.placeholder.preset", "commands.switchy_proxy.placeholder.proxy")
 		).forEach(t -> helpTextRegistry.accept(t, (p) -> true));
 	}
 }

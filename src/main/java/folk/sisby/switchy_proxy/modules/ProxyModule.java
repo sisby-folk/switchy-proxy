@@ -2,6 +2,7 @@ package folk.sisby.switchy_proxy.modules;
 
 import folk.sisby.switchy.api.SwitchyEvents;
 import folk.sisby.switchy.api.module.*;
+import folk.sisby.switchy_proxy.SwitchyProxyCommands;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
@@ -20,6 +21,12 @@ public class ProxyModule extends ProxyModuleData implements SwitchyModule, Switc
 				.withDescriptionWhenEnabled(Text.translatable("switchy.switchy_proxy.module.proxies.enabled"))
 				.withDescriptionWhenDisabled(Text.translatable("switchy.switchy_proxy.module.proxies.disabled"))
 				.withDeletionWarning(Text.translatable("switchy.switchy_proxy.module.proxies.warning"))
+				.withModuleConfig(ProxyModuleConfig::new)
+				.withConfigCommands(root -> {
+					root.then(SwitchyProxyCommands.COMMAND_ADD);
+					root.then(SwitchyProxyCommands.COMMAND_REMOVE);
+					root.then(SwitchyProxyCommands.COMMAND_LATCH);
+				})
 		);
 	}
 }
