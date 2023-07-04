@@ -6,6 +6,7 @@ import folk.sisby.switchy.api.SwitchyPlayer;
 import folk.sisby.switchy.api.presets.SwitchyPreset;
 import folk.sisby.switchy.api.presets.SwitchyPresets;
 import folk.sisby.switchy_proxy.modules.ProxyModule;
+import folk.sisby.switchy_proxy.modules.ProxyModuleConfig;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.slf4j.Logger;
@@ -35,6 +36,10 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 						spp.switchy_proxy$setMatchedPreset(preset);
 						return match.strip(content);
 					}
+				}
+				if (presets.getModuleConfig(ProxyModule.ID, ProxyModuleConfig.class).isLatchEnabled() && spp.switchy_proxy$getLatchedPreset() != null && presets.getPresets().containsValue(spp.switchy_proxy$getLatchedPreset())) {
+					spp.switchy_proxy$setMatchedPreset(spp.switchy_proxy$getLatchedPreset());
+					return content;
 				}
 			}
 			return content;
