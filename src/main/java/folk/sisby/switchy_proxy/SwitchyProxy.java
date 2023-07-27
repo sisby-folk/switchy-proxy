@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
-import java.util.function.Consumer;
+import java.util.Objects;
 
 public class SwitchyProxy implements SwitchyEvents.Init {
 	public static final String ID = "switchy_proxy";
@@ -29,7 +29,7 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 	public static final String ARG_CONTENT = "proxy_content";
 	public static final String ARG_DISPLAY_NAME = "proxy_display_name";
 
-	public static boolean proxyDisplayName(SwitchyProxyProfile spp, boolean clear, Consumer<Text> nameSetter) {
+	public static  @Nullable Text proxyDisplayName(SwitchyProxyProfile spp, boolean clear) {
 		SwitchyPreset preset = spp.switchy_proxy$getMatchedPreset();
 		if (preset != null) {
 			if (clear) spp.switchy_proxy$setMatchedPreset(null);
@@ -37,19 +37,17 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 			if (preset.containsModule(StyledNicknamesModule.ID)) {
 				Text nickname = preset.getModule(StyledNicknamesModule.ID, StyledNicknamesModule.class).getText();
 				if (nickname != null) {
-					nameSetter.accept(nickname);
-					return true;
+					return nickname;
 				}
 			}
 			if (preset.containsModule(DrogtorModule.ID)) {
 				Text nickname = preset.getModule(DrogtorModule.ID, DrogtorModule.class).getText();
 				if (nickname != null) {
-					nameSetter.accept(nickname);
-					return true;
+					return nickname;
 				}
 			}
 		}
-		return false;
+		return null;
 	}
 
 	public static @Nullable String proxyContent(String content, ServerPlayerEntity player) {
@@ -89,7 +87,7 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 
 		ServerMessageEvents.CHAT_MESSAGE.register(PHASE_ARGS, (message, sender, params) -> {
 			if (sender.getGameProfile() instanceof SwitchyProxyProfile spp) {
-				proxyDisplayName(spp, false, text -> ((ExtSignedMessage) (Object) message).styledChat_setArg(ARG_DISPLAY_NAME, text));
+				((ExtSignedMessage) (Object) message).styledChat_setArg(ARG_DISPLAY_NAME, Objects.requireNonNullElse(proxyDisplayName(spp, false), Text.empty()));
 				if (spp.switchy_proxy$getProxiedContent() != null) {
 					((ExtSignedMessage) (Object) message).styledChat_setArg(ARG_CONTENT, Text.literal(spp.switchy_proxy$getProxiedContent()));
 				}
