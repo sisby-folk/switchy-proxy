@@ -58,7 +58,7 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 		}));
 
 		ServerMessageEvents.COMMAND_MESSAGE.register(((message, source, params) -> {
-			ServerPlayerEntity player = source.getPlayer().getGameProfile();
+			ServerPlayerEntity player = source.getPlayer();
 			if (player != null && player.getGameProfile() instanceof SwitchyProxyProfile spp) {
 				spp.switchy_proxy$setMatchedPreset(null);
 			}
