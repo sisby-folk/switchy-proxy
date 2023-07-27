@@ -23,7 +23,7 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 	public void onInitialize() {
 		StyledChatEvents.PRE_MESSAGE_CONTENT.register((content, placeholderContext) -> {
 			ServerPlayerEntity player = placeholderContext.player();
-			if (player instanceof SwitchyPlayer sp && player instanceof SwitchyProxyPlayer spp) {
+			if (player instanceof SwitchyPlayer sp && player.getGameProfile() instanceof SwitchyProxyProfile spp) {
 				SwitchyPresets presets = sp.switchy$getPresets();
 				for (Map.Entry<String, ProxyModule> entry : presets.getAllOfModule(ProxyModule.ID, ProxyModule.class).entrySet()) {
 					String name = entry.getKey();
@@ -52,13 +52,13 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 		});
 
 		ServerMessageEvents.CHAT_MESSAGE.register(((message, sender, params) -> {
-			if (sender instanceof SwitchyProxyPlayer spp) {
+			if (sender.getGameProfile() instanceof SwitchyProxyProfile spp) {
 				spp.switchy_proxy$setMatchedPreset(null);
 			}
 		}));
 
 		ServerMessageEvents.COMMAND_MESSAGE.register(((message, source, params) -> {
-			if (source.getPlayer() instanceof SwitchyProxyPlayer spp) {
+			if (source.getPlayer().getGameProfile() instanceof SwitchyProxyProfile spp) {
 				spp.switchy_proxy$setMatchedPreset(null);
 			}
 		}));
