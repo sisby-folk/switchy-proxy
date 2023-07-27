@@ -16,7 +16,7 @@ public class ChatStyleMixin {
 	@Redirect(method = "getChat", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;getDisplayName()Lnet/minecraft/text/Text;"))
 	public Text proxyChat(ServerPlayerEntity player) {
 		if (player.getGameProfile() instanceof SwitchyProxyProfile spp) {
-			Text proxyName = proxyDisplayName(spp, true);
+			Text proxyName = proxyDisplayName(spp);
 			if (proxyName != null) {
 				return proxyName;
 			}
@@ -28,7 +28,7 @@ public class ChatStyleMixin {
 	public Text proxySay(ServerCommandSource source) {
 		ServerPlayerEntity player = source.getPlayer();
 		if (player != null && player.getGameProfile() instanceof SwitchyProxyProfile spp) {
-			Text proxyName = proxyDisplayName(spp, true);
+			Text proxyName = proxyDisplayName(spp);
 			if (proxyName != null) {
 				return proxyName;
 			}
@@ -40,7 +40,7 @@ public class ChatStyleMixin {
 	public Text proxyMe(ServerCommandSource source) {
 		ServerPlayerEntity player = source.getPlayer();
 		if (player != null && player.getGameProfile() instanceof SwitchyProxyProfile spp) {
-			Text proxyName = proxyDisplayName(spp, true);
+			Text proxyName = proxyDisplayName(spp);
 			if (proxyName != null) {
 				return proxyName;
 			}

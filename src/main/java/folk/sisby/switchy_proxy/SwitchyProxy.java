@@ -29,11 +29,9 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 	public static final String ARG_CONTENT = "proxy_content";
 	public static final String ARG_DISPLAY_NAME = "proxy_display_name";
 
-	public static  @Nullable Text proxyDisplayName(SwitchyProxyProfile spp, boolean clear) {
+	public static  @Nullable Text proxyDisplayName(SwitchyProxyProfile spp) {
 		SwitchyPreset preset = spp.switchy_proxy$getMatchedPreset();
 		if (preset != null) {
-			if (clear) spp.switchy_proxy$setMatchedPreset(null);
-
 			if (preset.containsModule(StyledNicknamesModule.ID)) {
 				Text nickname = preset.getModule(StyledNicknamesModule.ID, StyledNicknamesModule.class).getText();
 				if (nickname != null) {
@@ -87,7 +85,7 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 
 		ServerMessageEvents.CHAT_MESSAGE.register(PHASE_ARGS, (message, sender, params) -> {
 			if (sender.getGameProfile() instanceof SwitchyProxyProfile spp) {
-				((ExtSignedMessage) (Object) message).styledChat_setArg(ARG_DISPLAY_NAME, Objects.requireNonNullElse(proxyDisplayName(spp, false), Text.empty()));
+				((ExtSignedMessage) (Object) message).styledChat_setArg(ARG_DISPLAY_NAME, Objects.requireNonNullElse(proxyDisplayName(spp), Text.empty()));
 				if (spp.switchy_proxy$getProxiedContent() != null) {
 					((ExtSignedMessage) (Object) message).styledChat_setArg(ARG_CONTENT, Text.literal(spp.switchy_proxy$getProxiedContent()));
 				}
