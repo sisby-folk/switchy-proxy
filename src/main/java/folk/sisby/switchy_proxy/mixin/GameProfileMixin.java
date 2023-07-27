@@ -1,12 +1,12 @@
 package folk.sisby.switchy_proxy.mixin;
 
+import com.mojang.authlib.GameProfile;
 import folk.sisby.switchy.api.presets.SwitchyPreset;
-import folk.sisby.switchy_proxy.SwitchyProxyPlayer;
-import net.minecraft.entity.player.PlayerEntity;
+import folk.sisby.switchy_proxy.SwitchyProxyProfile;
 import org.spongepowered.asm.mixin.Mixin;
 
-@Mixin(value = PlayerEntity.class, priority = 1001)
-public class PlayerEntityMixin implements SwitchyProxyPlayer {
+@Mixin(GameProfile.class)
+public class GameProfileMixin implements SwitchyProxyProfile {
 	private SwitchyPreset switchy_proxy$matchedPreset;
 	private SwitchyPreset switchy_proxy$latchedPreset;
 
