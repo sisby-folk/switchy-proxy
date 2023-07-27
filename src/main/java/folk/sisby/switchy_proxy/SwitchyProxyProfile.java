@@ -2,7 +2,7 @@ package folk.sisby.switchy_proxy;
 
 import folk.sisby.switchy.api.presets.SwitchyPreset;
 
-public interface SwitchyProxyPlayer {
+public interface SwitchyProxyProfile {
 	void switchy_proxy$setMatchedPreset(SwitchyPreset preset);
 
 	void switchy_proxy$setLatchedPreset(SwitchyPreset preset);

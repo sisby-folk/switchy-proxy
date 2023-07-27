@@ -3,7 +3,7 @@ package folk.sisby.switchy_proxy.mixin;
 import eu.pb4.styledchat.config.ChatStyle;
 import folk.sisby.switchy.api.presets.SwitchyPreset;
 import folk.sisby.switchy.modules.StyledNicknamesModule;
-import folk.sisby.switchy_proxy.SwitchyProxyPlayer;
+import folk.sisby.switchy_proxy.SwitchyProxyProfile;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ChatStyle.class)
 public class ChatStyleMixin {
-	private @Nullable Text proxyDisplayName(SwitchyProxyPlayer spp) {
+	private @Nullable Text proxyDisplayName(SwitchyProxyProfile spp) {
 		SwitchyPreset preset = spp.switchy_proxy$getMatchedPreset();
 		if (preset != null) {
 			spp.switchy_proxy$setMatchedPreset(null);
@@ -27,7 +27,7 @@ public class ChatStyleMixin {
 
 	@Redirect(method = "getChat", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;getDisplayName()Lnet/minecraft/text/Text;"))
 	public Text proxyChat(ServerPlayerEntity player) {
-		if (player instanceof SwitchyProxyPlayer spp) {
+		if (player.getGameProfile() instanceof SwitchyProxyProfile spp) {
 			Text proxyName = proxyDisplayName(spp);
 			if (proxyName != null) {
 				return proxyName;
@@ -38,7 +38,8 @@ public class ChatStyleMixin {
 
 	@Redirect(method = "getSayCommand", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/command/ServerCommandSource;getDisplayName()Lnet/minecraft/text/Text;"))
 	public Text proxySay(ServerCommandSource source) {
-		if (source.getPlayer() instanceof SwitchyProxyPlayer spp) {
+		ServerPlayerEntity player = source.getPlayer();
+		if (player != null && player.getGameProfile() instanceof SwitchyProxyProfile spp) {
 			Text proxyName = proxyDisplayName(spp);
 			if (proxyName != null) {
 				return proxyName;
@@ -49,7 +50,8 @@ public class ChatStyleMixin {
 
 	@Redirect(method = "getMeCommand", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/command/ServerCommandSource;getDisplayName()Lnet/minecraft/text/Text;"))
 	public Text proxyMe(ServerCommandSource source) {
-		if (source.getPlayer() instanceof SwitchyProxyPlayer spp) {
+		ServerPlayerEntity player = source.getPlayer();
+		if (player != null && player.getGameProfile() instanceof SwitchyProxyProfile spp) {
 			Text proxyName = proxyDisplayName(spp);
 			if (proxyName != null) {
 				return proxyName;
