@@ -16,11 +16,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class GameProfileMixin implements SwitchyProxyProfile {
 	private SwitchyPreset switchy_proxy$matchedPreset;
 	private SwitchyPreset switchy_proxy$latchedPreset;
+	private String switchy_proxy$proxiedContent;
 
 	@Override
 	public void switchy_proxy$setMatchedPreset(SwitchyPreset preset) {
 		if (preset != null) switchy_proxy$setLatchedPreset(preset);
 		switchy_proxy$matchedPreset = preset;
+	}
+
+	@Override
+	public void switchy_proxy$setProxiedContent(String content) {
+		switchy_proxy$proxiedContent = content;
 	}
 
 	@Override
@@ -31,6 +37,11 @@ public class GameProfileMixin implements SwitchyProxyProfile {
 	@Override
 	public SwitchyPreset switchy_proxy$getMatchedPreset() {
 		return switchy_proxy$matchedPreset;
+	}
+
+	@Override
+	public String switchy_proxy$getProxiedContent() {
+		return switchy_proxy$proxiedContent;
 	}
 
 	@Override
