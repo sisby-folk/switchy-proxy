@@ -21,7 +21,7 @@ public class ChatStyleMixin {
 	public void proxyChat(Args args, ServerPlayerEntity player, Text message) {
 		if (player.getGameProfile() instanceof SwitchyProxyProfile spp) {
 			Map<String, Text> placeholders = new HashMap<>(args.get(3));
-			if (proxyDisplayName(spp, true, t -> placeholders.put("player", t))) {
+			if (proxyDisplayName(spp, t -> placeholders.put("player", t))) {
 				args.set(3, placeholders);
 			}
 		}
@@ -32,7 +32,7 @@ public class ChatStyleMixin {
 		ServerPlayerEntity player = source.method_44023();
 		if (player != null && player.getGameProfile() instanceof SwitchyProxyProfile spp) {
 			Map<String, Text> placeholders = new HashMap<>(args.get(2));
-			if (proxyDisplayName(spp, true, t -> {
+			if (proxyDisplayName(spp, t -> {
 				placeholders.put("player", t);
 				placeholders.put("displayName", t);
 			})) {
@@ -46,7 +46,7 @@ public class ChatStyleMixin {
 		ServerPlayerEntity player = source.method_44023();
 		if (player != null && player.getGameProfile() instanceof SwitchyProxyProfile spp) {
 			Map<String, Text> placeholders = new HashMap<>(args.get(2));
-			if (proxyDisplayName(spp, true, t -> {
+			if (proxyDisplayName(spp, t -> {
 				placeholders.put("player", t);
 				placeholders.put("displayName", t);
 			})) {
