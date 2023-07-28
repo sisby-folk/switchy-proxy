@@ -57,6 +57,7 @@ public class GameProfileMixin implements SwitchyProxyProfile {
 				if (value != null) {
 					PropertyMap newMap = new PropertyMap();
 					newMap.putAll(cir.getReturnValue());
+					newMap.removeAll("textures");
 					newMap.put("textures", new Property("textures", value));
 					cir.setReturnValue(newMap);
 				}
