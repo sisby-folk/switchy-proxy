@@ -53,12 +53,12 @@ public class GameProfileMixin implements SwitchyProxyProfile {
 	public void replaceTexturePropertyForBridges(CallbackInfoReturnable<PropertyMap> cir) {
 		if (switchy_proxy$getMatchedPreset() != null) {
 			try {
-				String value = switchy_proxy$getMatchedPreset().getModule(FabricTailorModule.ID, FabricTailorModule.class).skinValue;
-				if (value != null) {
+				FabricTailorModule module = switchy_proxy$getMatchedPreset().getModule(FabricTailorModule.ID, FabricTailorModule.class);
+				if (module.skinValue != null) {
 					PropertyMap newMap = new PropertyMap();
 					newMap.putAll(cir.getReturnValue());
 					newMap.removeAll("textures");
-					newMap.put("textures", new Property("textures", value));
+					newMap.put("textures", new Property("textures", module.skinValue, module.skinSignature));
 					cir.setReturnValue(newMap);
 				}
 			} catch (ModuleNotFoundException ignored) {
