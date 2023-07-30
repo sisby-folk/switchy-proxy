@@ -84,7 +84,7 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 	}
 
 	private static void onMessageArgs(C_zzdolisx message, @Nullable ServerPlayerEntity sender, MessageType.C_iocvgdxe params) {
-		if (sender.getGameProfile() instanceof SwitchyProxyProfile spp) {
+		if (sender != null && sender.getGameProfile() instanceof SwitchyProxyProfile spp) {
 			proxyDisplayName(spp, text -> ((ExtSignedMessage) (Object) message).styledChat_setArg(ARG_DISPLAY_NAME, text));
 			if (spp.switchy_proxy$getProxiedContent() != null) {
 				((ExtSignedMessage) (Object) message).styledChat_setArg(ARG_CONTENT, Text.literal(spp.switchy_proxy$getProxiedContent()));
@@ -93,7 +93,7 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 	}
 
 	private static void onMessageClear(C_zzdolisx message, @Nullable ServerPlayerEntity sender, MessageType.C_iocvgdxe params) {
-		if (sender.getGameProfile() instanceof SwitchyProxyProfile spp) {
+		if (sender != null && sender.getGameProfile() instanceof SwitchyProxyProfile spp) {
 			spp.switchy_proxy$setMatchedPreset(null);
 			spp.switchy_proxy$setProxiedContent(null);
 		}
