@@ -11,10 +11,10 @@ import folk.sisby.switchy.modules.StyledNicknamesModule;
 import folk.sisby.switchy_proxy.modules.ProxyModule;
 import folk.sisby.switchy_proxy.modules.ProxyModuleConfig;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
-import net.minecraft.network.MessageType;
+import net.minecraft.network.message.MessageType;
+import net.minecraft.network.message.SignedChatMessage;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.unmapped.C_zzdolisx;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -81,7 +81,7 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 		return content;
 	}
 
-	private static void onMessageArgs(C_zzdolisx message, @Nullable ServerPlayerEntity sender, MessageType.C_iocvgdxe params) {
+	private static void onMessageArgs(SignedChatMessage message, @Nullable ServerPlayerEntity sender, MessageType.Parameters params) {
 		if (sender != null && sender.getGameProfile() instanceof SwitchyProxyProfile spp) {
 			((ExtSignedMessage) (Object) message).styledChat_setArg(ARG_DISPLAY_NAME, Objects.requireNonNullElse(proxyDisplayName(spp), Text.empty()));
 			if (spp.switchy_proxy$getProxiedContent() != null) {
@@ -90,7 +90,7 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 		}
 	}
 
-	private static void onMessageClear(C_zzdolisx message, @Nullable ServerPlayerEntity sender, MessageType.C_iocvgdxe params) {
+	private static void onMessageClear(SignedChatMessage message, @Nullable ServerPlayerEntity sender, MessageType.Parameters params) {
 		if (sender != null && sender.getGameProfile() instanceof SwitchyProxyProfile spp) {
 			spp.switchy_proxy$setMatchedPreset(null);
 			spp.switchy_proxy$setProxiedContent(null);
@@ -105,8 +105,8 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 		ServerMessageEvents.CHAT_MESSAGE.register(PHASE_CLEAR, SwitchyProxy::onMessageClear);
 		ServerMessageEvents.CHAT_MESSAGE.addPhaseOrdering(PHASE_ARGS, PHASE_CLEAR);
 
-		ServerMessageEvents.COMMAND_MESSAGE.register(PHASE_ARGS, (m, s, p) -> onMessageArgs(m, s.method_44023(), p));
-		ServerMessageEvents.COMMAND_MESSAGE.register(PHASE_CLEAR, (m, s, p) -> onMessageClear(m, s.method_44023(), p));
+		ServerMessageEvents.COMMAND_MESSAGE.register(PHASE_ARGS, (m, s, p) -> onMessageArgs(m, s.getPlayer(), p));
+		ServerMessageEvents.COMMAND_MESSAGE.register(PHASE_CLEAR, (m, s, p) -> onMessageClear(m, s.getPlayer(), p));
 		ServerMessageEvents.COMMAND_MESSAGE.addPhaseOrdering(PHASE_ARGS, PHASE_CLEAR);
 	}
 }
