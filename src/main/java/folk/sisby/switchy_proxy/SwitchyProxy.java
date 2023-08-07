@@ -55,29 +55,31 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 	public static @Nullable String proxyContent(String content, ServerPlayerEntity player) {
 		if (player instanceof SwitchyPlayer sp && player.getGameProfile() instanceof SwitchyProxyProfile spp) {
 			SwitchyPresets presets = sp.switchy$getPresets();
-			for (Map.Entry<String, ProxyModule> entry : presets.getAllOfModule(ProxyModule.ID, ProxyModule.class).entrySet()) {
-				String name = entry.getKey();
-				ProxyModule module = entry.getValue();
-				ProxyTag match = module.getTags().stream().filter(tag -> tag.matches(content)).findFirst().orElse(null);
-				if (match != null) {
-					SwitchyPreset preset = presets.getPreset(name);
-					if (spp.switchy_proxy$getMatchedPreset() == null) {
-						SwitchyProxy.LOGGER.info("[Switchy Proxy] Original | <{}> {}", player.getGameProfile().getName(), content);
+			if (presets.isModuleEnabled(ProxyModule.ID)) {
+				for (Map.Entry<String, ProxyModule> entry : presets.getAllOfModule(ProxyModule.ID, ProxyModule.class).entrySet()) {
+					String name = entry.getKey();
+					ProxyModule module = entry.getValue();
+					ProxyTag match = module.getTags().stream().filter(tag -> tag.matches(content)).findFirst().orElse(null);
+					if (match != null) {
+						SwitchyPreset preset = presets.getPreset(name);
+						if (spp.switchy_proxy$getMatchedPreset() == null) {
+							SwitchyProxy.LOGGER.info("[Switchy Proxy] Original | <{}> {}", player.getGameProfile().getName(), content);
+						}
+						spp.switchy_proxy$setMatchedPreset(preset);
+						String proxiedContent = match.strip(content);
+						spp.switchy_proxy$setProxiedContent(proxiedContent);
+						return proxiedContent;
 					}
-					spp.switchy_proxy$setMatchedPreset(preset);
-					String proxiedContent = match.strip(content);
-					spp.switchy_proxy$setProxiedContent(proxiedContent);
-					return proxiedContent;
 				}
-			}
-			if (presets.getModuleConfig(ProxyModule.ID, ProxyModuleConfig.class).isLatchEnabled() && spp.switchy_proxy$getLatchedPreset() != null && presets.getPresets().containsValue(spp.switchy_proxy$getLatchedPreset())) {
-				spp.switchy_proxy$setMatchedPreset(spp.switchy_proxy$getLatchedPreset());
-				return content;
-			}
-			// Fix styled chat breaking drogtor coloured nicknames by forcing the mixin route
-			if (presets.containsModule(DrogtorModule.ID) && presets.isModuleEnabled(DrogtorModule.ID)) {
-				presets.getCurrentPreset().getModule(DrogtorModule.ID, DrogtorModule.class).updateFromPlayer(player, null);
-				spp.switchy_proxy$setMatchedPreset(presets.getCurrentPreset());
+				if (presets.getModuleConfig(ProxyModule.ID, ProxyModuleConfig.class).isLatchEnabled() && spp.switchy_proxy$getLatchedPreset() != null && presets.getPresets().containsValue(spp.switchy_proxy$getLatchedPreset())) {
+					spp.switchy_proxy$setMatchedPreset(spp.switchy_proxy$getLatchedPreset());
+					return content;
+				}
+				// Fix styled chat breaking drogtor coloured nicknames by forcing the mixin route
+				if (presets.containsModule(DrogtorModule.ID) && presets.isModuleEnabled(DrogtorModule.ID)) {
+					presets.getCurrentPreset().getModule(DrogtorModule.ID, DrogtorModule.class).updateFromPlayer(player, null);
+					spp.switchy_proxy$setMatchedPreset(presets.getCurrentPreset());
+				}
 			}
 		}
 		return content;
