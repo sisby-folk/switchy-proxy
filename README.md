@@ -1,4 +1,5 @@
-<center>A PluralKit-like switchy addon for pattern-matching, per-message nickname swapping.<br/>
+<center><img alt="switchy proxy demo" src="https://github.com/sisby-folk/switchy-proxy/assets/55819817/2e1b85d2-9492-4a57-a1dd-5612b406a198"/><br/>
+A PluralKit-like switchy addon for pattern-matching, per-message nickname swapping.<br/>
 Requires <a href="https://modrinth.com/mod/switchy">Switchy</a> and <a href="https://modrinth.com/mod/styled-chat">Styled Chat</a>.
 </center>
 

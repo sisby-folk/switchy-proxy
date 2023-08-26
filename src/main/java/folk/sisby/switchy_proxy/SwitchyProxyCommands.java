@@ -7,7 +7,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import folk.sisby.switchy.api.SwitchyEvents;
 import folk.sisby.switchy.api.SwitchyFeedbackStatus;
 import folk.sisby.switchy.api.SwitchyPlayer;
 import folk.sisby.switchy.api.exception.ModuleNotFoundException;
@@ -34,7 +33,7 @@ import static folk.sisby.switchy.util.Feedback.helpText;
 import static folk.sisby.switchy.util.Feedback.literal;
 import static folk.sisby.switchy.util.SwitchyCommand.execute;
 
-public class SwitchyProxyCommands implements SwitchyEvents.CommandInit {
+public class SwitchyProxyCommands {
 	public static final LiteralArgumentBuilder<ServerCommandSource> COMMAND_ADD = CommandManager.literal("add")
 		.then(SwitchyCommand.presetArgument(true)
 			.then(CommandManager.argument("pattern", StringArgumentType.greedyString())
@@ -123,8 +122,7 @@ public class SwitchyProxyCommands implements SwitchyEvents.CommandInit {
 		}
 	}
 
-	@Override
-	public void registerCommands(LiteralArgumentBuilder<ServerCommandSource> switchyArgument, BiConsumer<Text, Predicate<ServerPlayerEntity>> helpTextRegistry) {
+	public static void registerCommands(LiteralArgumentBuilder<ServerCommandSource> switchyArgument, BiConsumer<Text, Predicate<ServerPlayerEntity>> helpTextRegistry) {
 		switchyArgument
 			.then(CommandManager.literal("proxy")
 				.then(COMMAND_ADD)

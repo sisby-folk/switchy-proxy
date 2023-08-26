@@ -86,6 +86,8 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 
 	@Override
 	public void onInitialize() {
+		SwitchyEvents.COMMAND_INIT.register(SwitchyProxyCommands::registerCommands);
+
 		StyledChatEvents.PRE_MESSAGE_CONTENT.register((content, placeholderContext) -> proxyContent(content, placeholderContext.player()));
 
 		ServerMessageEvents.CHAT_MESSAGE.register(PHASE_ARGS, SwitchyProxy::onMessageArgs);
