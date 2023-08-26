@@ -19,12 +19,11 @@
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
-			"events": [
+			"switchy": [
 				"folk.sisby.switchy_proxy.SwitchyProxy",
-				"folk.sisby.switchy_proxy.SwitchyProxyCommands",
 				"folk.sisby.switchy_proxy.modules.ProxyModule"
 			],
-			"client_events": [
+			"switchy_client": [
 				"folk.sisby.switchy_proxy.modules.client.ProxyClientModule"
 			]
 		},
@@ -36,6 +35,10 @@
 			{
 				"id": "quilt_loader",
 				"versions": ">=${ql}"
+			},
+			{
+				"id": "quilted_fabric_api",
+				"versions": ">=${qfapi}"
 			},
 			{
 				"id": "switchy-ui",

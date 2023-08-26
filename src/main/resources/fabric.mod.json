@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "switchy-proxy",
+  "version": "${switchy}",
+  "name": "Switchy Proxy",
+  "description": "Per-message nickname swapping using Switchy",
+  "authors": [
+    "Sisby folk"
+  ],
+  "contact": {
+    "homepage": "https://modrinth.com/mod/switchy-proxy",
+    "issues": "https://github.com/sisby-folk/switchy-proxy/issues",
+    "sources": "https://github.com/sisby-folk/switchy-proxy"
+  },
+  "icon": "assets/switchy_proxy/icon.png",
+  "license": "LGPL-3.0-only",
+  "environment": "*",
+  "entrypoints": {
+    "switchy": [
+      "folk.sisby.switchy_proxy.SwitchyProxy",
+      "folk.sisby.switchy_proxy.modules.ProxyModule"
+    ],
+    "switchy_client": [
+      "folk.sisby.switchy_proxy.modules.client.ProxyClientModule"
+    ]
+  },
+  "depends": {
+    "minecraft": ">=${mc}",
+    "fabricloader": ">=0.14.9",
+    "fabric": ">=${fapi}",
+    "switchy-core": ">=${switchy}",
+    "switchy-client": ">=${switchy}",
+    "switchy-ui": ">=${switchy}",
+    "switchy-compat": ">=${switchy}",
+    "styledchat": ">=${styledChat}"
+  },
+  "modmenu": {
+    "parent": "switchy"
+  }
+}
