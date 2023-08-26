@@ -28,7 +28,7 @@ dependencyResolutionManagement {
 			// // Base // //
 			version('mc', mc)
 			version('ql', "0.19.0")
-			version('qm', "${mc}+build.22")
+			version('qm', "${mc}+build.10")
 			version('fapi', "${fapi}-${mc}")
 			version('qfapi', "4.0.0-beta.30+${fapi}-${mc}")
 
