@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "switchy-proxy",
-  "version": "${switchy}",
+  "version": "${version}",
   "name": "Switchy Proxy",
   "description": "Per-message nickname swapping using Switchy",
   "authors": [
