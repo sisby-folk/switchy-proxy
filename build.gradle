@@ -59,9 +59,6 @@ repositories {
 
 	// Origins
 	maven {
-		url = 'https://ladysnake.jfrog.io/artifactory/mods'
-	}
-	maven {
 		url = 'https://maven.cafeteria.dev'
 		content {
 			includeGroup 'net.adriantodt.fabricmc'
