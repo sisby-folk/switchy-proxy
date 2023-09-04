@@ -34,6 +34,9 @@
     "switchy-compat": ">=${switchy}",
     "styledchat": ">=${styledChat}"
   },
+  "mixins": [
+    "switchy-proxy.mixins.json"
+  ],
   "modmenu": {
     "parent": "switchy"
   }
