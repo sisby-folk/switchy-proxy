@@ -12,7 +12,9 @@ import folk.sisby.switchy_proxy.modules.ProxyModule;
 import folk.sisby.switchy_proxy.modules.ProxyModuleConfig;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.minecraft.network.MessageType;
+import net.minecraft.scoreboard.Team;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.unmapped.C_zzdolisx;
 import net.minecraft.util.Identifier;
@@ -21,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class SwitchyProxy implements SwitchyEvents.Init {
 	public static final String ID = "switchy_proxy";
@@ -31,25 +32,30 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 	public static final String ARG_CONTENT = "proxy_content";
 	public static final String ARG_DISPLAY_NAME = "proxy_display_name";
 
-	public static boolean proxyDisplayName(SwitchyProxyPlayer spp, Consumer<Text> nameSetter) {
+	public static @Nullable Text decorateDisplayName(MutableText text, SwitchyProxyPlayer spp) {
+		if (text != null && spp instanceof ServerPlayerEntity spe) {
+			return spe.addTellClickEvent(Team.decorateName(spe.getScoreboardTeam(), text));
+		}
+		return null;
+	}
+
+	public static @Nullable Text proxyDisplayName(SwitchyProxyPlayer spp) {
 		SwitchyPreset preset = spp.switchy_proxy$getMatchedPreset();
 		if (preset != null) {
 			if (preset.containsModule(StyledNicknamesModule.ID)) {
-				Text nickname = preset.getModule(StyledNicknamesModule.ID, StyledNicknamesModule.class).getText();
+				Text nickname = preset.getModule(StyledNicknamesModule.ID, StyledNicknamesModule.class).getOutput();
 				if (nickname != null) {
-					nameSetter.accept(nickname);
-					return true;
+					return decorateDisplayName((MutableText) nickname, spp);
 				}
 			}
 			if (preset.containsModule(DrogtorModule.ID)) {
 				Text nickname = preset.getModule(DrogtorModule.ID, DrogtorModule.class).getText();
 				if (nickname != null) {
-					nameSetter.accept(nickname);
-					return true;
+					return decorateDisplayName((MutableText) nickname, spp);
 				}
 			}
 		}
-		return false;
+		return null;
 	}
 
 	public static @Nullable String proxyContent(String content, ServerPlayerEntity player) {
@@ -85,17 +91,18 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 		return content;
 	}
 
+	@SuppressWarnings("ConstantValue")
 	private static void onMessageArgs(C_zzdolisx message, @Nullable ServerPlayerEntity sender, MessageType.C_iocvgdxe params) {
-		if (sender != null && sender instanceof SwitchyProxyPlayer spp) {
-			proxyDisplayName(spp, text -> ((ExtSignedMessage) (Object) message).styledChat_setArg(ARG_DISPLAY_NAME, text));
+		if (sender instanceof SwitchyProxyPlayer spp && (Object) message instanceof ExtSignedMessage esm) {
+			esm.styledChat_setArg(ARG_DISPLAY_NAME, proxyDisplayName(spp));
 			if (spp.switchy_proxy$getProxiedContent() != null) {
-				((ExtSignedMessage) (Object) message).styledChat_setArg(ARG_CONTENT, Text.literal(spp.switchy_proxy$getProxiedContent()));
+				esm.styledChat_setArg(ARG_CONTENT, Text.literal(spp.switchy_proxy$getProxiedContent()));
 			}
 		}
 	}
 
 	private static void onMessageClear(C_zzdolisx message, @Nullable ServerPlayerEntity sender, MessageType.C_iocvgdxe params) {
-		if (sender != null && sender instanceof SwitchyProxyPlayer spp) {
+		if (sender instanceof SwitchyProxyPlayer spp) {
 			spp.switchy_proxy$setMatchedPreset(null);
 			spp.switchy_proxy$setProxiedContent(null);
 		}

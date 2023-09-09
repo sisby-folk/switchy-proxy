@@ -37,6 +37,7 @@
   "mixins": [
     "switchy-proxy.mixins.json"
   ],
+  "accessWidener": "switchy-proxy.accesswidener",
   "modmenu": {
     "parent": "switchy"
   }
