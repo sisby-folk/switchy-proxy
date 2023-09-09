@@ -31,7 +31,7 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 	public static final String ARG_CONTENT = "proxy_content";
 	public static final String ARG_DISPLAY_NAME = "proxy_display_name";
 
-	public static boolean proxyDisplayName(SwitchyProxyProfile spp, Consumer<Text> nameSetter) {
+	public static boolean proxyDisplayName(SwitchyProxyPlayer spp, Consumer<Text> nameSetter) {
 		SwitchyPreset preset = spp.switchy_proxy$getMatchedPreset();
 		if (preset != null) {
 			if (preset.containsModule(StyledNicknamesModule.ID)) {
@@ -53,7 +53,7 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 	}
 
 	public static @Nullable String proxyContent(String content, ServerPlayerEntity player) {
-		if (player instanceof SwitchyPlayer sp && player.getGameProfile() instanceof SwitchyProxyProfile spp) {
+		if (player instanceof SwitchyPlayer sp && player instanceof SwitchyProxyPlayer spp) {
 			SwitchyPresets presets = sp.switchy$getPresets();
 			if (presets.isModuleEnabled(ProxyModule.ID)) {
 				for (Map.Entry<String, ProxyModule> entry : presets.getAllOfModule(ProxyModule.ID, ProxyModule.class).entrySet()) {
@@ -63,7 +63,7 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 					if (match != null) {
 						SwitchyPreset preset = presets.getPreset(name);
 						if (spp.switchy_proxy$getMatchedPreset() == null) {
-							SwitchyProxy.LOGGER.info("[Switchy Proxy] Original | <{}> {}", player.getGameProfile().getName(), content);
+							SwitchyProxy.LOGGER.info("[Switchy Proxy] Original | <{}> {}", player.getName(), content);
 						}
 						spp.switchy_proxy$setMatchedPreset(preset);
 						String proxiedContent = match.strip(content);
@@ -86,7 +86,7 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 	}
 
 	private static void onMessageArgs(C_zzdolisx message, @Nullable ServerPlayerEntity sender, MessageType.C_iocvgdxe params) {
-		if (sender != null && sender.getGameProfile() instanceof SwitchyProxyProfile spp) {
+		if (sender != null && sender instanceof SwitchyProxyPlayer spp) {
 			proxyDisplayName(spp, text -> ((ExtSignedMessage) (Object) message).styledChat_setArg(ARG_DISPLAY_NAME, text));
 			if (spp.switchy_proxy$getProxiedContent() != null) {
 				((ExtSignedMessage) (Object) message).styledChat_setArg(ARG_CONTENT, Text.literal(spp.switchy_proxy$getProxiedContent()));
@@ -95,7 +95,7 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 	}
 
 	private static void onMessageClear(C_zzdolisx message, @Nullable ServerPlayerEntity sender, MessageType.C_iocvgdxe params) {
-		if (sender != null && sender.getGameProfile() instanceof SwitchyProxyProfile spp) {
+		if (sender != null && sender instanceof SwitchyProxyPlayer spp) {
 			spp.switchy_proxy$setMatchedPreset(null);
 			spp.switchy_proxy$setProxiedContent(null);
 		}

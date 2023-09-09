@@ -1,7 +1,7 @@
 package folk.sisby.switchy_proxy.mixin;
 
 import eu.pb4.styledchat.config.ChatStyle;
-import folk.sisby.switchy_proxy.SwitchyProxyProfile;
+import folk.sisby.switchy_proxy.SwitchyProxyPlayer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -19,7 +19,7 @@ import static folk.sisby.switchy_proxy.SwitchyProxy.proxyDisplayName;
 public class ChatStyleMixin {
 	@ModifyArgs(method = "getChat", at = @At(value = "INVOKE", target = "Leu/pb4/placeholders/api/Placeholders;parseText(Leu/pb4/placeholders/api/node/TextNode;Leu/pb4/placeholders/api/PlaceholderContext;Ljava/util/regex/Pattern;Ljava/util/Map;)Lnet/minecraft/text/Text;"))
 	public void proxyChat(Args args, ServerPlayerEntity player, Text message) {
-		if (player.getGameProfile() instanceof SwitchyProxyProfile spp) {
+		if (player instanceof SwitchyProxyPlayer spp) {
 			Map<String, Text> placeholders = new HashMap<>(args.get(3));
 			if (proxyDisplayName(spp, t -> placeholders.put("player", t))) {
 				args.set(3, placeholders);
@@ -30,7 +30,7 @@ public class ChatStyleMixin {
 	@ModifyArgs(method = "getSayCommand", at = @At(value = "INVOKE", target = "Leu/pb4/placeholders/api/Placeholders;parseText(Lnet/minecraft/text/Text;Ljava/util/regex/Pattern;Ljava/util/Map;)Lnet/minecraft/text/Text;"))
 	public void proxySay(Args args, ServerCommandSource source, Text message) {
 		ServerPlayerEntity player = source.method_44023();
-		if (player != null && player.getGameProfile() instanceof SwitchyProxyProfile spp) {
+		if (player != null && player instanceof SwitchyProxyPlayer spp) {
 			Map<String, Text> placeholders = new HashMap<>(args.get(2));
 			if (proxyDisplayName(spp, t -> {
 				placeholders.put("player", t);
@@ -44,7 +44,7 @@ public class ChatStyleMixin {
 	@ModifyArgs(method = "getMeCommand", at = @At(value = "INVOKE", target = "Leu/pb4/placeholders/api/Placeholders;parseText(Lnet/minecraft/text/Text;Ljava/util/regex/Pattern;Ljava/util/Map;)Lnet/minecraft/text/Text;"))
 	public void proxyMe(Args args, ServerCommandSource source, Text message) {
 		ServerPlayerEntity player = source.method_44023();
-		if (player != null && player.getGameProfile() instanceof SwitchyProxyProfile spp) {
+		if (player != null && player instanceof SwitchyProxyPlayer spp) {
 			Map<String, Text> placeholders = new HashMap<>(args.get(2));
 			if (proxyDisplayName(spp, t -> {
 				placeholders.put("player", t);

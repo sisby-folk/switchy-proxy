@@ -15,45 +15,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = GameProfile.class, remap = false)
 public class GameProfileMixin implements SwitchyProxyProfile {
 	private SwitchyPreset switchy_proxy$matchedPreset;
-	private SwitchyPreset switchy_proxy$latchedPreset;
-	private String switchy_proxy$proxiedContent;
 
 	@Override
 	public void switchy_proxy$setMatchedPreset(SwitchyPreset preset) {
-		if (preset != null) switchy_proxy$setLatchedPreset(preset);
 		switchy_proxy$matchedPreset = preset;
-	}
-
-	@Override
-	public void switchy_proxy$setProxiedContent(String content) {
-		switchy_proxy$proxiedContent = content;
-	}
-
-	@Override
-	public void switchy_proxy$setLatchedPreset(SwitchyPreset preset) {
-		switchy_proxy$latchedPreset = preset;
-	}
-
-	@Override
-	public SwitchyPreset switchy_proxy$getMatchedPreset() {
-		return switchy_proxy$matchedPreset;
-	}
-
-	@Override
-	public String switchy_proxy$getProxiedContent() {
-		return switchy_proxy$proxiedContent;
-	}
-
-	@Override
-	public SwitchyPreset switchy_proxy$getLatchedPreset() {
-		return switchy_proxy$latchedPreset;
 	}
 
 	@Inject(method = "getProperties", at = @At("RETURN"), cancellable = true)
 	public void replaceTexturePropertyForBridges(CallbackInfoReturnable<PropertyMap> cir) {
-		if (switchy_proxy$getMatchedPreset() != null) {
+		if (switchy_proxy$matchedPreset != null) {
 			try {
-				FabricTailorModule module = switchy_proxy$getMatchedPreset().getModule(FabricTailorModule.ID, FabricTailorModule.class);
+				FabricTailorModule module = switchy_proxy$matchedPreset.getModule(FabricTailorModule.ID, FabricTailorModule.class);
 				if (module.skinValue != null) {
 					PropertyMap newMap = new PropertyMap();
 					newMap.putAll(cir.getReturnValue());
