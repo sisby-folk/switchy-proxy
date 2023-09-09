@@ -106,6 +106,10 @@ dependencies {
 	modImplementation libs.styledChat
 }
 
+loom {
+	accessWidenerPath = file("src/main/resources/switchy-proxy.accesswidener")
+}
+
 processResources {
 	final Map<String, String> map = [
 			"version": version.toString(),
