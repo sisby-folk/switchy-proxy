@@ -2,6 +2,7 @@ package folk.sisby.switchy_proxy.mixin;
 
 import eu.pb4.styledchat.config.ChatStyle;
 import folk.sisby.switchy_proxy.SwitchyProxyPlayer;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
@@ -27,13 +28,13 @@ public class ChatStyleMixin {
 		return proxyPlayer(player);
 	}
 
-	@Redirect(method = "getSayCommand", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;getDisplayName()Lnet/minecraft/text/Text;"))
-	public Text proxySay(ServerPlayerEntity player) {
-		return proxyPlayer(player);
+	@Redirect(method = "getSayCommand", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/command/ServerCommandSource;getDisplayName()Lnet/minecraft/text/Text;"))
+	public Text proxySay(ServerCommandSource source) {
+		return source.getEntity() instanceof ServerPlayerEntity player ? proxyPlayer(player) : source.getDisplayName();
 	}
 
-	@Redirect(method = "getMeCommand", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;getDisplayName()Lnet/minecraft/text/Text;"))
-	public Text proxyMe(ServerPlayerEntity player) {
-		return proxyPlayer(player);
+	@Redirect(method = "getMeCommand", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/command/ServerCommandSource;getDisplayName()Lnet/minecraft/text/Text;"))
+	public Text proxyMe(ServerCommandSource source) {
+		return source.getEntity() instanceof ServerPlayerEntity player ? proxyPlayer(player) : source.getDisplayName();
 	}
 }
