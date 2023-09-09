@@ -10,9 +10,11 @@ import folk.sisby.switchy.modules.StyledNicknamesModule;
 import folk.sisby.switchy_proxy.modules.ProxyModule;
 import folk.sisby.switchy_proxy.modules.ProxyModuleConfig;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
+import net.minecraft.scoreboard.Team;
 import net.minecraft.network.message.MessageType;
 import net.minecraft.network.message.SignedChatMessage;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -20,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
-import java.util.Objects;
 
 public class SwitchyProxy implements SwitchyEvents.Init {
 	public static final String ID = "switchy_proxy";
@@ -30,18 +31,25 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 	public static final String ARG_CONTENT = "proxy_content";
 	public static final String ARG_DISPLAY_NAME = "proxy_display_name";
 
-	public static @Nullable Text proxyDisplayName(SwitchyProxyProfile spp) {
+	public static @Nullable Text decorateDisplayName(MutableText text, SwitchyProxyPlayer spp) {
+		if (text != null && spp instanceof ServerPlayerEntity spe) {
+			return spe.addTellClickEvent(Team.decorateName(spe.getScoreboardTeam(), text));
+		}
+		return null;
+	}
+
+	public static @Nullable Text proxyDisplayName(SwitchyProxyPlayer spp) {
 		SwitchyPreset preset = spp.switchy_proxy$getMatchedPreset();
 		if (preset != null) {
 			if (preset.containsModule(StyledNicknamesModule.ID)) {
-				return preset.getModule(StyledNicknamesModule.ID, StyledNicknamesModule.class).getText();
+				return decorateDisplayName((MutableText) preset.getModule(StyledNicknamesModule.ID, StyledNicknamesModule.class).getOutput(), spp);
 			}
 		}
 		return null;
 	}
 
 	public static @Nullable String proxyContent(String content, ServerPlayerEntity player) {
-		if (player instanceof SwitchyPlayer sp && player.getGameProfile() instanceof SwitchyProxyProfile spp) {
+		if (player instanceof SwitchyPlayer sp && player instanceof SwitchyProxyPlayer spp) {
 			SwitchyPresets presets = sp.switchy$getPresets();
 			if (presets.isModuleEnabled(ProxyModule.ID)) {
 				for (Map.Entry<String, ProxyModule> entry : presets.getAllOfModule(ProxyModule.ID, ProxyModule.class).entrySet()) {
@@ -51,7 +59,7 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 					if (match != null) {
 						SwitchyPreset preset = presets.getPreset(name);
 						if (spp.switchy_proxy$getMatchedPreset() == null) {
-							SwitchyProxy.LOGGER.info("[Switchy Proxy] Original | <{}> {}", player.getGameProfile().getName(), content);
+							SwitchyProxy.LOGGER.info("[Switchy Proxy] Original | <{}> {}", player.getName(), content);
 						}
 						spp.switchy_proxy$setMatchedPreset(preset);
 						String proxiedContent = match.strip(content);
@@ -68,17 +76,18 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 		return content;
 	}
 
+	@SuppressWarnings("ConstantValue")
 	private static void onMessageArgs(SignedChatMessage message, @Nullable ServerPlayerEntity sender, MessageType.Parameters params) {
-		if (sender != null && sender.getGameProfile() instanceof SwitchyProxyProfile spp) {
-			((ExtSignedMessage) (Object) message).styledChat_setArg(ARG_DISPLAY_NAME, Objects.requireNonNullElse(proxyDisplayName(spp), Text.empty()));
+		if (sender instanceof SwitchyProxyPlayer spp && (Object) message instanceof ExtSignedMessage esm) {
+			esm.styledChat_setArg(ARG_DISPLAY_NAME, proxyDisplayName(spp));
 			if (spp.switchy_proxy$getProxiedContent() != null) {
-				((ExtSignedMessage) (Object) message).styledChat_setArg(ARG_CONTENT, Text.literal(spp.switchy_proxy$getProxiedContent()));
+				esm.styledChat_setArg(ARG_CONTENT, Text.literal(spp.switchy_proxy$getProxiedContent()));
 			}
 		}
 	}
 
 	private static void onMessageClear(SignedChatMessage message, @Nullable ServerPlayerEntity sender, MessageType.Parameters params) {
-		if (sender != null && sender.getGameProfile() instanceof SwitchyProxyProfile spp) {
+		if (sender instanceof SwitchyProxyPlayer spp) {
 			spp.switchy_proxy$setMatchedPreset(null);
 			spp.switchy_proxy$setProxiedContent(null);
 		}

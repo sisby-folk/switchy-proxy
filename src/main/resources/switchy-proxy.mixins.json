@@ -6,6 +6,7 @@
   "mixins": [
     "ChatStyleMixin",
     "GameProfileMixin",
+    "ServerPlayerMixin",
     "ServerPlayNetworkHandlerMixin"
   ],
   "client": [

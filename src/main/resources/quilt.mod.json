@@ -54,5 +54,6 @@
 			}
 		]
 	},
-	"mixin": "switchy-proxy.mixins.json"
+	"mixin": "switchy-proxy.mixins.json",
+	"access_widener": "switchy-proxy.accesswidener"
 }
