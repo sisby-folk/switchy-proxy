@@ -11,7 +11,6 @@ import folk.sisby.switchy.modules.StyledNicknamesModule;
 import folk.sisby.switchy_proxy.modules.ProxyModule;
 import folk.sisby.switchy_proxy.modules.ProxyModuleConfig;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
-import net.minecraft.network.MessageType;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.network.message.MessageType;
 import net.minecraft.network.message.SignedChatMessage;
