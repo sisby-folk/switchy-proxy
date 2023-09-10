@@ -138,6 +138,9 @@ jar {
 	from("LICENSE.txt") {
 		rename { "${it}_${archivesBaseName}" }
 	}
+	from("src/main/resources/data/switchy_proxy/lang/en_us.json") {
+		into { "assets/switchy_proxy_data/lang" }
+	}
 }
 
 publishing {
