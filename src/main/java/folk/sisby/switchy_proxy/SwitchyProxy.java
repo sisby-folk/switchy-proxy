@@ -8,6 +8,7 @@ import folk.sisby.switchy.api.presets.SwitchyPreset;
 import folk.sisby.switchy.api.presets.SwitchyPresets;
 import folk.sisby.switchy.modules.DrogtorModule;
 import folk.sisby.switchy.modules.StyledNicknamesModule;
+import folk.sisby.switchy.util.Feedback;
 import folk.sisby.switchy_proxy.modules.ProxyModule;
 import folk.sisby.switchy_proxy.modules.ProxyModuleConfig;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
@@ -96,7 +97,7 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 		if (sender instanceof SwitchyProxyPlayer spp && (Object) message instanceof ExtSignedMessage esm) {
 			esm.styledChat_setArg(ARG_DISPLAY_NAME, proxyDisplayName(spp));
 			if (spp.switchy_proxy$getProxiedContent() != null) {
-				esm.styledChat_setArg(ARG_CONTENT, Text.literal(spp.switchy_proxy$getProxiedContent()));
+				esm.styledChat_setArg(ARG_CONTENT, Feedback.literal(spp.switchy_proxy$getProxiedContent()));
 			}
 		}
 	}
