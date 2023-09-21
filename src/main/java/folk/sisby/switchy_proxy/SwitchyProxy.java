@@ -1,23 +1,18 @@
 package folk.sisby.switchy_proxy;
 
 import eu.pb4.styledchat.StyledChatEvents;
-import eu.pb4.styledchat.ducks.ExtSignedMessage;
 import folk.sisby.switchy.api.SwitchyEvents;
 import folk.sisby.switchy.api.SwitchyPlayer;
 import folk.sisby.switchy.api.presets.SwitchyPreset;
 import folk.sisby.switchy.api.presets.SwitchyPresets;
 import folk.sisby.switchy.modules.DrogtorModule;
 import folk.sisby.switchy.modules.StyledNicknamesModule;
-import folk.sisby.switchy.util.Feedback;
 import folk.sisby.switchy_proxy.modules.ProxyModule;
 import folk.sisby.switchy_proxy.modules.ProxyModuleConfig;
-import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
-import net.minecraft.network.MessageType;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.unmapped.C_zzdolisx;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -30,8 +25,6 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 	public static final Logger LOGGER = LoggerFactory.getLogger(ID);
 	public static final Identifier PHASE_ARGS = new Identifier(ID, "set_args");
 	public static final Identifier PHASE_CLEAR = new Identifier(ID, "clear");
-	public static final String ARG_CONTENT = "proxy_content";
-	public static final String ARG_DISPLAY_NAME = "proxy_display_name";
 
 	public static @Nullable Text decorateDisplayName(MutableText text, SwitchyProxyPlayer spp) {
 		if (text != null && spp instanceof ServerPlayerEntity spe) {
@@ -60,6 +53,7 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 	}
 
 	public static @Nullable String proxyContent(String content, ServerPlayerEntity player) {
+		onMessageClear(null, player, false);
 		if (player instanceof SwitchyPlayer sp && player instanceof SwitchyProxyPlayer spp) {
 			SwitchyPresets presets = sp.switchy$getPresets();
 			if (presets.isModuleEnabled(ProxyModule.ID)) {
@@ -70,7 +64,7 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 					if (match != null) {
 						SwitchyPreset preset = presets.getPreset(name);
 						if (spp.switchy_proxy$getMatchedPreset() == null) {
-							SwitchyProxy.LOGGER.info("[Switchy Proxy] Original | <{}> {}", player.getName(), content);
+							SwitchyProxy.LOGGER.info("[Switchy Proxy] Original | <{}> {}", player.getGameProfile().getName(), content);
 						}
 						spp.switchy_proxy$setMatchedPreset(preset);
 						String proxiedContent = match.strip(content);
@@ -92,35 +86,20 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 		return content;
 	}
 
-	@SuppressWarnings("ConstantValue")
-	private static void onMessageArgs(C_zzdolisx message, @Nullable ServerPlayerEntity sender, MessageType.C_iocvgdxe params) {
-		if (sender instanceof SwitchyProxyPlayer spp && (Object) message instanceof ExtSignedMessage esm) {
-			esm.styledChat_setArg(ARG_DISPLAY_NAME, proxyDisplayName(spp));
-			if (spp.switchy_proxy$getProxiedContent() != null) {
-				esm.styledChat_setArg(ARG_CONTENT, Feedback.literal(spp.switchy_proxy$getProxiedContent()));
-			}
-		}
-	}
-
-	private static void onMessageClear(C_zzdolisx message, @Nullable ServerPlayerEntity sender, MessageType.C_iocvgdxe params) {
+	private static Text onMessageClear(Text message, @Nullable ServerPlayerEntity sender, boolean filtered) {
 		if (sender instanceof SwitchyProxyPlayer spp) {
 			spp.switchy_proxy$setMatchedPreset(null);
 			spp.switchy_proxy$setProxiedContent(null);
 		}
+		return message;
 	}
 
 	@Override
 	public void onInitialize() {
 		SwitchyEvents.COMMAND_INIT.register(SwitchyProxyCommands::registerCommands);
 
-		StyledChatEvents.PRE_MESSAGE_CONTENT.register((content, placeholderContext) -> proxyContent(content, placeholderContext.player()));
+		StyledChatEvents.PRE_MESSAGE_CONTENT_SEND.register((content, player, filtered) -> proxyContent(content, player));
 
-		ServerMessageEvents.CHAT_MESSAGE.register(PHASE_ARGS, SwitchyProxy::onMessageArgs);
-		ServerMessageEvents.CHAT_MESSAGE.register(PHASE_CLEAR, SwitchyProxy::onMessageClear);
-		ServerMessageEvents.CHAT_MESSAGE.addPhaseOrdering(PHASE_ARGS, PHASE_CLEAR);
-
-		ServerMessageEvents.COMMAND_MESSAGE.register(PHASE_ARGS, (m, s, p) -> onMessageArgs(m, s.method_44023(), p));
-		ServerMessageEvents.COMMAND_MESSAGE.register(PHASE_CLEAR, (m, s, p) -> onMessageClear(m, s.method_44023(), p));
-		ServerMessageEvents.COMMAND_MESSAGE.addPhaseOrdering(PHASE_ARGS, PHASE_CLEAR);
+		// StyledChatEvents.MESSAGE_CONTENT_SEND.register(SwitchyProxy::onMessageClear);
 	}
 }
