@@ -3,16 +3,16 @@ loom = "1.3.+"
 githubRelease = "2.4.1"
 minotaur = "2.6.0"
 
-mc = "1.19.2"
+mc = "1.19.4"
 ql = "0.19.0"
-qm = "1.19.2+build.22"
-fapi = "0.76.0-1.19.2"
-qfapi = "4.0.0-beta.30+0.76.0-1.19.2"
+qm = "1.19.4+build.10"
+fapi = "0.83.0-1.19.4"
+qfapi = "6.0.0-beta.9+0.83.0-1.19.4"
 
-switchy = "2.8.2+1.19"
+switchy = "2.8.3+1.19.4"
 
-placeholder = "2.0.0-pre.1+1.19.2"
-styledChat = "2.0.2+1.19.2"
+placeholder = "2.1.0+1.19.4"
+styledChat = "2.1.6+1.19.4"
 
 
 
