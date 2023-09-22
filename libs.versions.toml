@@ -14,8 +14,6 @@ switchy = "2.8.2+1.19"
 placeholder = "2.0.0-pre.1+1.19.2"
 styledChat = "2.0.2+1.19.2"
 
-
-
 [plugins]
 loom = { id = "org.quiltmc.loom", version.ref = "loom" }
 githubRelease = { id = "com.github.breadmoirai.github-release", version.ref = "githubRelease" }
