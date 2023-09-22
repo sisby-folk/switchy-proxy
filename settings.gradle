@@ -1,54 +1,15 @@
 pluginManagement {
 	repositories {
-		maven {
-			name = 'Quilt'
-			url = 'https://maven.quiltmc.org/repository/release'
-		}
-		// Currently needed for Intermediary and other temporary dependencies
-		maven {
-			name = 'Fabric'
-			url = 'https://maven.fabricmc.net/'
-		}
+		maven { url 'https://maven.quiltmc.org/repository/release'}
+		maven { url 'https://maven.fabricmc.net/'}
 		gradlePluginPortal()
 	}
 }
 
 dependencyResolutionManagement {
 	versionCatalogs {
-		libs {
-			def mc_major = '1.20'
-			def mc = mc_major + ''
-			def fapi = "0.83.0"
-
-			// // Build Tools // //
-			version('loom', '1.2.+')
-
-			plugin('loom', 'org.quiltmc.loom').versionRef('loom')
-
-			// // Base // //
-			version('mc', mc)
-			version('ql', "0.19.0")
-			version('qm', "${mc}+build.4")
-			version('fapi', "${fapi}-${mc}")
-			version('qfapi', "7.0.1+${fapi}-${mc}")
-
-			library('mc', 'mojang', 'minecraft').versionRef('mc')
-			library('ql', 'org.quiltmc', 'quilt-loader').versionRef('ql')
-			library('qm', 'org.quiltmc', 'quilt-mappings').versionRef('qm')
-			library('qfapi', 'org.quiltmc.quilted-fabric-api', 'quilted-fabric-api',).versionRef('qfapi')
-
-			// // Switchy // //
-			version('switchy', "2.8.1+${mc}")
-
-			library('switchyUI', 'folk.sisby', 'switchy-ui').versionRef('switchy')
-			library('switchyCompat', 'folk.sisby', 'switchy-compat').versionRef('switchy')
-
-			// // Functionality // //
-			version('placeholder', "2.1.0+1.19.4")
-			version('styledChat', "2.2.0+${mc}")
-
-			library('placeholder', 'eu.pb4', 'placeholder-api').versionRef('placeholder')
-			library('styledChat', 'maven.modrinth', 'styled-chat').versionRef('styledChat')
+		create("libs") {
+			from(files("libs.versions.toml"))
 		}
 	}
 }

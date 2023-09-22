@@ -2,6 +2,7 @@ package folk.sisby.switchy_proxy.modules;
 
 import folk.sisby.switchy.api.SwitchyEvents;
 import folk.sisby.switchy.api.module.*;
+import folk.sisby.switchy.util.Feedback;
 import folk.sisby.switchy_proxy.SwitchyProxyCommands;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -17,10 +18,10 @@ public class ProxyModule extends ProxyModuleData implements SwitchyModule, Switc
 
 	@Override
 	public void onInitialize() {
-		SwitchyModuleRegistry.registerModule(ID, ProxyModule::new, new SwitchyModuleInfo(true, SwitchyModuleEditable.ALWAYS_ALLOWED, Text.translatable("switchy.switchy_proxy.module.proxies.description"))
-				.withDescriptionWhenEnabled(Text.translatable("switchy.switchy_proxy.module.proxies.enabled"))
-				.withDescriptionWhenDisabled(Text.translatable("switchy.switchy_proxy.module.proxies.disabled"))
-				.withDeletionWarning(Text.translatable("switchy.switchy_proxy.module.proxies.warning"))
+		SwitchyModuleRegistry.registerModule(ID, ProxyModule::new, new SwitchyModuleInfo(true, SwitchyModuleEditable.ALWAYS_ALLOWED, Feedback.translatable("switchy.switchy_proxy.module.proxies.description"))
+				.withDescriptionWhenEnabled(Feedback.translatable("switchy.switchy_proxy.module.proxies.enabled"))
+				.withDescriptionWhenDisabled(Feedback.translatable("switchy.switchy_proxy.module.proxies.disabled"))
+				.withDeletionWarning(Feedback.translatable("switchy.switchy_proxy.module.proxies.warning"))
 				.withModuleConfig(ProxyModuleConfig::new)
 				.withConfigCommands(root -> {
 					root.then(SwitchyProxyCommands.COMMAND_ADD);
