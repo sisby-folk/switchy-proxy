@@ -26,7 +26,7 @@
   },
   "depends": {
     "minecraft": ">=${mc}",
-    "fabricloader": ">=0.14.9",
+    "fabricloader": ">=${fl}",
     "fabric": ">=${fapi}",
     "switchy-core": ">=${switchy}",
     "switchy-client": ">=${switchy}",
@@ -37,8 +37,5 @@
   "mixins": [
     "switchy-proxy.mixins.json"
   ],
-  "accessWidener": "switchy-proxy.accesswidener",
-  "modmenu": {
-    "parent": "switchy"
-  }
+  "accessWidener": "switchy-proxy.accesswidener"
 }

@@ -5,12 +5,13 @@ import folk.sisby.switchy_proxy.SwitchyProxyPlayer;
 import folk.sisby.switchy_proxy.SwitchyProxyProfile;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(ServerPlayerEntity.class)
 public class ServerPlayerMixin implements SwitchyProxyPlayer {
-	private SwitchyPreset switchy_proxy$matchedPreset;
-	private SwitchyPreset switchy_proxy$latchedPreset;
-	private String switchy_proxy$proxiedContent;
+	@Unique private SwitchyPreset switchy_proxy$matchedPreset;
+	@Unique private SwitchyPreset switchy_proxy$latchedPreset;
+	@Unique private String switchy_proxy$proxiedContent;
 
 	@Override
 	public void switchy_proxy$setMatchedPreset(SwitchyPreset preset) {
