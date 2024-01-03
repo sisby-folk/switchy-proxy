@@ -11,9 +11,9 @@ import folk.sisby.switchy.util.Feedback;
 import folk.sisby.switchy_proxy.modules.ProxyModule;
 import folk.sisby.switchy_proxy.modules.ProxyModuleConfig;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
-import net.minecraft.scoreboard.Team;
 import net.minecraft.network.message.MessageType;
-import net.minecraft.network.message.SignedChatMessage;
+import net.minecraft.network.message.SignedMessage;
+import net.minecraft.scoreboard.Team;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -78,7 +78,7 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 	}
 
 	@SuppressWarnings("ConstantValue")
-	private static void onMessageArgs(SignedChatMessage message, @Nullable ServerPlayerEntity sender, MessageType.Parameters params) {
+	private static void onMessageArgs(SignedMessage message, @Nullable ServerPlayerEntity sender, MessageType.Parameters params) {
 		if (sender instanceof SwitchyProxyPlayer spp && (Object) message instanceof ExtSignedMessage esm) {
 			esm.styledChat_setArg(ARG_DISPLAY_NAME, proxyDisplayName(spp));
 			if (spp.switchy_proxy$getProxiedContent() != null) {
@@ -87,7 +87,7 @@ public class SwitchyProxy implements SwitchyEvents.Init {
 		}
 	}
 
-	private static void onMessageClear(SignedChatMessage message, @Nullable ServerPlayerEntity sender, MessageType.Parameters params) {
+	private static void onMessageClear(SignedMessage message, @Nullable ServerPlayerEntity sender, MessageType.Parameters params) {
 		if (sender instanceof SwitchyProxyPlayer spp) {
 			spp.switchy_proxy$setMatchedPreset(null);
 			spp.switchy_proxy$setProxiedContent(null);

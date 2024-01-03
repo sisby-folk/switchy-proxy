@@ -4,17 +4,14 @@ githubRelease = "2.4.1"
 minotaur = "2.6.0"
 
 mc = "1.20.1"
-ql = "0.19.0"
-qm = "1.20.1+build.23"
-fapi = "0.83.0-1.20"
-qfapi = "7.0.2+0.83.0-1.20.1"
+fl = "0.15.1"
+yarn = "1.20.1+build.10"
+fapi = "0.87.0+1.20.1"
 
-switchy = "2.8.3+1.19.4"
+switchy = "2.9.0+1.20"
 
 placeholder = "2.1.1+1.20"
 styledChat = "2.2.3+1.20.1"
-
-
 
 [plugins]
 loom = { id = "org.quiltmc.loom", version.ref = "loom" }
@@ -23,9 +20,9 @@ minotaur = { id = "com.modrinth.minotaur", version.ref = "minotaur" }
 
 [libraries]
 mc = { group = "mojang", name = "minecraft", version.ref = "mc" }
-ql = { group = "org.quiltmc", name = "quilt-loader", version.ref = "ql" }
-qm = { group = "org.quiltmc", name = "quilt-mappings", version.ref = "qm" }
-qfapi = { group = "org.quiltmc.quilted-fabric-api", name = "quilted-fabric-api", version.ref = "qfapi" }
+fl = { group = "net.fabricmc", name = "fabric-loader", version.ref = "fl" }
+yarn = { group = "net.fabricmc", name = "yarn", version.ref = "yarn" }
+fapi = { group = "net.fabricmc.fabric-api", name = "fabric-api", version.ref = "fapi" }
 
 switchyCore = { group = "folk.sisby", name = "switchy-core", version.ref = "switchy" }
 switchyClient = { group = "folk.sisby", name = "switchy-client", version.ref = "switchy" }
