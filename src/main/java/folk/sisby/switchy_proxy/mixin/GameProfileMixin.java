@@ -8,13 +8,14 @@ import folk.sisby.switchy.api.presets.SwitchyPreset;
 import folk.sisby.switchy.modules.FabricTailorModule;
 import folk.sisby.switchy_proxy.SwitchyProxyProfile;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = GameProfile.class, remap = false)
 public class GameProfileMixin implements SwitchyProxyProfile {
-	private SwitchyPreset switchy_proxy$matchedPreset;
+	@Unique private SwitchyPreset switchy_proxy$matchedPreset;
 
 	@Override
 	public void switchy_proxy$setMatchedPreset(SwitchyPreset preset) {
