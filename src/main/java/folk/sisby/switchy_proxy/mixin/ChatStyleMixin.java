@@ -5,6 +5,7 @@ import folk.sisby.switchy_proxy.SwitchyProxyPlayer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
@@ -12,7 +13,7 @@ import static folk.sisby.switchy_proxy.SwitchyProxy.proxyDisplayName;
 
 @Mixin(ChatStyle.class)
 public class ChatStyleMixin {
-	private static Text proxyPlayer(ServerPlayerEntity player) {
+	@Unique private static Text proxyPlayer(ServerPlayerEntity player) {
 		if (player instanceof SwitchyProxyPlayer spp) {
 			Text proxyName = proxyDisplayName(spp);
 			if (proxyName != null) {
